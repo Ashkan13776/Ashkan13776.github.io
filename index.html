@@ -9,11 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Inter:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
       --gold: #D4A574; 
@@ -53,40 +49,43 @@
       justify-content: space-between;
     }
 
-    .header-title {
-      font-size: 28px;
-      font-weight: 600;
+    .header-title { font-size: 28px; font-weight: 600; }
+    .header-title a { color: var(--gold); text-decoration: none; }
+
+    .content-card {
+      display: flex;
+      gap: 4vw;
+      align-items: center;
+      max-width: 1000px;
+      margin: 50px auto;
+      padding: 0 5vw;
     }
 
-    .header-title a {
-      color: var(--gold);
-      text-decoration: none;
+    .image-section {
+      flex: 0 0 40%;
     }
 
-    .greeting {
-      font-size: clamp(26px, 4vw, 38px);
-      margin-bottom: 10px;
+    .profile-image {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+    .profile-image:hover {
+      transform: scale(1.05);
     }
 
-    .greeting-subtitle {
-      font-size: clamp(18px, 2vw, 22px);
-      font-weight: 300;
-      color: var(--link-blue);
+    .text-section {
+      flex: 1;
     }
 
-    .intro {
-      margin: 30px 0;
-      font-size: clamp(18px, 1.5vw, 22px);
-      max-width: 600px;
-    }
+    .greeting { font-size: clamp(26px, 4vw, 38px); margin-bottom: 10px; }
+    .greeting-subtitle { font-size: clamp(18px, 2vw, 22px); font-weight: 300; color: var(--link-blue); }
 
-    .status-list {
-      list-style: none;
-      padding-left: 20px;
-    }
-    .status-list li {
-      margin-bottom: 12px;
-    }
+    .intro { margin: 30px 0; font-size: clamp(18px, 1.5vw, 22px); max-width: 600px; }
+
+    .status-list { list-style: none; padding-left: 20px; }
+    .status-list li { margin-bottom: 12px; }
 
     .footer {
       border-top: 1px solid var(--border-light);
@@ -103,14 +102,12 @@
       gap: 20px;
       justify-content: center;
     }
+    .footer-social a { color: var(--link-blue); font-size: 20px; transition: transform 0.3s; }
+    .footer-social a:hover { transform: translateY(-3px); }
 
-    .footer-social a {
-      color: var(--link-blue);
-      font-size: 20px;
-      transition: transform 0.3s;
-    }
-    .footer-social a:hover {
-      transform: translateY(-3px);
+    @media (max-width: 768px) {
+      .content-card { flex-direction: column; text-align: center; }
+      .image-section { width: 70%; margin-bottom: 20px; }
     }
   </style>
 </head>
@@ -128,23 +125,32 @@
     </div>
   </header>
 
-  <main class="main-container" style="padding: 5vw; max-width: 1000px; margin: auto;">
-    <h1 class="greeting">Hi, I’m Ashkan 👋</h1>
-    <h2 class="greeting-subtitle">I love LLMs, I love attention! xD and I love my cat Shifu 🐾</h2>
+  <main>
+    <div class="content-card">
+      <!-- Profile picture section -->
+      <div class="image-section">
+        <img src="images/profile.jpg" alt="Ashkan Shahbaiz" class="profile-image">
+      </div>
 
-    <p class="intro">
-      I’m a PhD student at Vanderbilt University working on machine learning, optimal transport, 
-      and attention mechanisms. You’ll often find me thinking about meta-learning, transformers, 
-      and calibrating confidence in large language models.
-    </p>
+      <!-- Text content -->
+      <div class="text-section">
+        <h1 class="greeting">Hi, I’m Ashkan 👋</h1>
+        <h2 class="greeting-subtitle">I love LLMs, I love attention! xD and I love my cat Shifu 🐾</h2>
 
-    <div class="current-status">
-      <h3>Recent Updates:</h3>
-      <ul class="status-list">
-        <li>🌟 Working on LLM uncertainty calibration & attention mechanisms</li>
-        <li>🚀 Joined MINT Lab with <a href="https://skolouri.github.io/" target="_blank">Prof. Soheil Kolouri</a></li>
-        <li>🐈 Shifu says hi!</li>
-      </ul>
+        <p class="intro">
+          I’m a PhD student at Vanderbilt University working on machine learning, optimal transport, 
+          and attention mechanisms. You’ll often find me thinking about meta-learning, transformers, 
+          and calibrating confidence in large language models.
+        </p>
+
+        <div class="current-status">
+          <h3>Recent Updates:</h3>
+          <ul class="status-list">
+            <li>🌟 Working on LLM uncertainty calibration & attention mechanisms</li>i>
+            <li>🐈 Shifu says hi!</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </main>
 
@@ -152,8 +158,8 @@
     <div>Made with 💜 on Ashkan-Shahbaiz.github.io</div>
     <div class="footer-social">
       <a href="mailto:ashkan@vanderbilt.edu"><i class="fas fa-envelope"></i></a>
-      <a href="https://github.com/Ashkan-Shahbaiz"><i class="fab fa-github"></i></a>
-      <a href="https://www.linkedin.com/in/ashkan-shahbaiz"><i class="fab fa-linkedin"></i></a>
+      <a href="https://github.com/ashkan13776"><i class="fab fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/ashkan-shahbazi-391b12161/"><i class="fab fa-linkedin"></i></a>
     </div>
   </footer>
 </body>
