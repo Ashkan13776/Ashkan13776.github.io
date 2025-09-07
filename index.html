@@ -4,171 +4,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ashkan Shahbazi</title>
-  <meta name="description" content="Ashkan Shahbazi — Fourth year CS PhD student working on LLMs, attention, and optimal transport." />
+  <meta name="description" content="Ashkan Shahbazi — CS PhD candidate working on LLMs, attention, and optimal transport." />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Inter:wght@300;400;600;800&family=Space+Mono&display=swap" rel="stylesheet" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root{
-      /* Boyish, modern palette */
-      --ink: #0b1220;           /* near-black navy */
-      --navy: #121a2b;          /* deep navy bg */
-      --slate: #1c2741;         /* card bg */
-      --steel: #2a3a64;         /* accents */
-      --cyan: #46c7f2;          /* links + highlights */
-      --amber: #ffcc66;         /* accent for chips/icons */
-      --text: #e9edf5;          /* primary text */
-      --muted: #a9b4cf;         /* secondary text */
-      --border: #2b375a;        /* borders */
-      --chip-bg: rgba(255,255,255,0.06);
-      --shadow: 0 10px 30px rgba(0,0,0,0.35);
-      --radius: 16px;
-    }
-
-    html,body{ height:100%; }
-    body{
-      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      color: var(--text);
-      background: radial-gradient(1200px 600px at 15% 10%, #1b2550 0%, transparent 60%),
-                  radial-gradient(1000px 700px at 80% 20%, #12203a 0%, transparent 55%),
-                  linear-gradient(160deg, var(--navy), var(--ink));
-      background-attachment: fixed;
-    }
-
-    a{ color: var(--cyan); text-decoration: none; }
-    a:hover{ text-decoration: underline; }
-
-    .container{ max-width: 1100px; margin: 0 auto; padding: 28px 24px 80px; }
-
-    /* Header */
-    .header{
-      display:flex; align-items:center; justify-content:space-between;
-      padding: 16px 0 8px; border-bottom: 1px solid var(--border);
-    }
-    .brand{
-      font-weight:800; letter-spacing:0.3px; font-size: clamp(18px, 1.4vw, 22px);
-    }
-    .nav-social{ display:flex; gap:18px; font-size:20px; }
-    .nav-social a{ transition: transform .2s ease; }
-    .nav-social a:hover{ transform: translateY(-2px); }
-
-    /* Hero */
-    .hero{
-      display:flex; gap:36px; align-items:center; justify-content:space-between;
-      margin-top: 32px; flex-wrap: wrap;
-    }
-    .pfp{
-      width: min(360px, 92vw); aspect-ratio: 4/5; object-fit: cover; border-radius: var(--radius);
-      box-shadow: var(--shadow); border: 1px solid var(--border);
-      transition: transform .3s ease;
-    }
-    .pfp:hover{ transform: scale(1.02); }
-
-    .hero-text{ flex: 1 1 480px; min-width: 280px; }
-    h1.greeting{
-      font-family: 'Bodoni Moda', serif;
-      font-size: clamp(28px, 4vw, 44px); line-height:1.2; letter-spacing:.2px; margin-bottom: 8px;
-    }
-    .subtitle{
-      color: var(--muted); font-weight: 400; font-size: clamp(15px, 1.4vw, 18px);
-    }
-
-    .chips{ margin-top:14px; display:flex; flex-wrap:wrap; gap:10px; }
-    .chip{
-      border: 1px solid var(--border); background: var(--chip-bg);
-      padding: 6px 10px; border-radius: 999px; font-size:13px; color: var(--muted);
-    }
-
-    .intro{
-      margin-top: 18px; font-size: clamp(16px, 1.4vw, 18px); color: var(--text); max-width: 60ch;
-    }
-
-    /* Section wrapper */
-    .section{ margin-top: 42px; }
-    .section h2{
-      font-size: clamp(18px, 2vw, 22px);
-      border-left: 4px solid var(--cyan);
-      padding-left: 10px; margin-bottom: 16px; letter-spacing:.2px;
-    }
-
-    /* News */
-    .news{
-      display:grid; gap:16px;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    }
-    .news-card{
-      background: var(--slate); border:1px solid var(--border); border-radius: var(--radius);
-      padding:16px; box-shadow: var(--shadow); display:flex; gap:12px;
-    }
-    .news-icon{
-      flex: 0 0 36px; height:36px; display:grid; place-items:center;
-      border-radius: 10px; background: var(--chip-bg); border:1px solid var(--border); color: var(--amber);
-    }
-    .news-body h3{ font-size: 16px; margin-bottom: 6px; }
-    .news-meta{ font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-    .news-body p{ font-size: 14px; color: var(--text); }
-
-    /* Two-column blocks */
-    .cards{
-      display:grid; gap:18px;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    }
-    .card{
-      background: var(--slate); border:1px solid var(--border); border-radius: var(--radius);
-      padding:18px; box-shadow: var(--shadow);
-    }
-    .card h3{ font-size: 16px; margin-bottom: 8px; }
-    .list{ list-style:none; color: var(--muted); }
-    .list li{ padding-left: 18px; position:relative; margin: 8px 0; }
-    .list li::before{
-      content: "•"; position:absolute; left:0; color: var(--cyan);
-    }
-
-    /* Footer */
-    footer{
-      margin-top: 60px; padding-top: 18px;
-      border-top: 1px solid var(--border); color: var(--muted); text-align:center;
-    }
-    .footer-social{ margin-top: 10px; display:flex; gap:18px; justify-content:center; font-size:20px; }
-    .footer-social a{ color: var(--cyan); }
-
-    @media (max-width: 840px){
-      .hero{ gap:22px; }
-    }
+    /* keep your existing styles */
   </style>
 </head>
 <body>
   <div class="container">
     <!-- Header -->
     <header class="header" role="banner">
-      <div class="brand"><a href="/" style="text-decoration:none; color:var(--text)">Ashkan Shahbaiz</a></div>
+      <div class="brand"><a href="/" style="text-decoration:none; color:var(--text)">Ashkan Shahbazi</a></div>
       <nav class="nav-social" aria-label="social">
         <a href="mailto:ashkan.shahbazi@vanderbilt.edu" title="Email"><i class="fas fa-envelope"></i></a>
         <a href="https://github.com/Ashkan13776" title="GitHub" target="_blank" rel="noreferrer noopener"><i class="fab fa-github"></i></a>
         <a href="https://www.linkedin.com/in/ashkan-shahbazi-391b12161/" title="LinkedIn" target="_blank" rel="noreferrer noopener"><i class="fab fa-linkedin"></i></a>
+        <a href="https://scholar.google.com/citations?user=lzdU2j8AAAAJ&hl=en" title="Google Scholar" target="_blank" rel="noreferrer noopener"><i class="fas fa-graduation-cap"></i></a>
       </nav>
     </header>
 
     <!-- Hero -->
     <section class="hero">
       <img src="ashkan.jpeg" alt="Ashkan" class="pfp" />
-
       <div class="hero-text">
         <h1 class="greeting">Hi, I’m Ashkan 👋</h1>
-        <p class="subtitle">CS PhD @ Vanderbilt • LLMs, attention, & optimal transport</p>
+        <p class="subtitle">CS PhD @ Vanderbilt • Transformers, LLMs, & Optimal Transport</p>
 
         <div class="chips" aria-label="interests">
           <span class="chip">Transformers & LLMs</span>
           <span class="chip">Optimal Transport</span>
-          <span class="chip">Applied Mathematics</span>
+          <span class="chip">Dataset Distillation</span>
+          <span class="chip">Soft-Tissue Simulation</span>
           <span class="chip">Shifu 🐾</span>
         </div>
 
         <p class="intro">
-          I build and study attention mechanisms and uncertainty for large language models. My work mixes optimal transport with pragmatic engineering for reliable, scalable systems.
+          I am a PhD candidate in Computer Science at Vanderbilt University, advised by <a href="https://skolouri.github.io" target="_blank">Prof. Soheil Kolouri</a>.
+          My research develops new attention mechanisms, uncertainty methods, and optimal transport theory for reliable large language models. 
+          I also work on geometric deep learning and neural-augmented simulators for real-time biomedical applications.
         </p>
       </div>
     </section>
@@ -177,73 +53,96 @@
     <section class="section" id="news">
       <h2>News</h2>
       <div class="news">
-        <!-- 1) Instacart internship -->
         <article class="news-card">
           <div class="news-icon"><i class="fa-solid fa-robot"></i></div>
           <div class="news-body">
-            <h3>Joining Instacart (Fall 2025)</h3>
-            <div class="news-meta">Updated: Sep 7, 2025</div>
-            <p>I’m joining Instacart as a Machine Learning PhD Intern (Fall 2025) to work on LLMs and prompt optimization.</p>
+            <h3>Instacart Internship</h3>
+            <div class="news-meta">Fall 2025</div>
+            <p>Joining Instacart’s Content AI team as an ML PhD Intern, focusing on calibrated confidence and prompt optimization for LLMs.</p>
           </div>
         </article>
 
-        <!-- 2) ESPFormer accepted -->
         <article class="news-card">
           <div class="news-icon"><i class="fa-solid fa-award"></i></div>
           <div class="news-body">
-            <h3>ICML 2025: ESPFormer accepted 🎉</h3>
-            <div class="news-meta">Updated: Sep 7, 2025</div>
-            <p>Our paper <em>“ESPFormer: Doubly Stochastic Attention with Expected Sliced Transport Plans”</em> has been accepted to ICML 2025.</p>
+            <h3>ICML 2025</h3>
+            <div class="news-meta">Accepted Paper</div>
+            <p><em>ESPFormer: Doubly Stochastic Attention with Expected Sliced Transport Plans</em> accepted to ICML 2025 🎉</p>
           </div>
         </article>
 
-        <!-- 3) Shifu -->
         <article class="news-card">
-          <div class="news-icon"><i class="fa-solid fa-cat"></i></div>
+          <div class="news-icon"><i class="fa-solid fa-star"></i></div>
           <div class="news-body">
-            <h3>Shifu says hi</h3>
-            <div class="news-meta">Updated: Sep 7, 2025</div>
-            <p>Chief Morale Officer 🐈‍⬛ checking in and purring about attention heads.</p>
+            <h3>ICLR 2025</h3>
+            <div class="news-meta">Spotlight + Main</div>
+            <p>Two papers accepted: <em>Linear Spherical Sliced OT</em> (spotlight) and <em>Expected Sliced Transport Plans</em>.</p>
+          </div>
+        </article>
+
+        <article class="news-card">
+          <div class="news-icon"><i class="fa-solid fa-patent"></i></div>
+          <div class="news-body">
+            <h3>Patent Filed</h3>
+            <div class="news-meta">January 2025</div>
+            <p>Patent pending on <em>Real-Time Soft Tissue Simulation via Hybrid AI-Driven Physics-Informed Modeling</em>.</p>
           </div>
         </article>
       </div>
     </section>
 
-    <!-- Optional sections (keep/edit/remove as you like) -->
+    <!-- Research Focus -->
     <section class="section">
-      <h2>Research Focus</h2>
+      <h2>Research Highlights</h2>
       <div class="cards">
         <div class="card">
-          <h3>Attention & OT</h3>
+          <h3>Attention & LLMs</h3>
           <ul class="list">
-            <li>Doubly-stochastic attention via expected sliced transport</li>
-            <li>Linear/approximate attention with transport priors</li>
-            <li>Efficient calibration & confidence for LLMs</li>
+            <li>ESPFormer (ICML 2025): doubly-stochastic attention with sliced OT</li>
+            <li>LUNA: meta-learned attention kernels (under review)</li>
+            <li>LOTFormer: linear DS attention (under review)</li>
           </ul>
         </div>
         <div class="card">
-          <h3>Reliable LLM Systems</h3>
+          <h3>Optimal Transport</h3>
           <ul class="list">
-            <li>Prompt optimization & evaluation pipelines</li>
-            <li>Uncertainty estimation for controllable LLM behavior</li>
+            <li>Linear spherical sliced OT (ICLR 2025 spotlight)</li>
+            <li>Expected sliced transport plans (ICLR 2025)</li>
+            <li>Stereographic S3W (ICML 2024 spotlight)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Biomedical AI</h3>
+          <ul class="list">
+            <li>Neural-Augmented Kelvinlet for real-time soft-tissue deformation</li>
+            <li>Patent-pending physics-informed simulators</li>
           </ul>
         </div>
       </div>
     </section>
 
+    <!-- Selected Papers -->
     <section class="section">
       <h2>Selected Papers</h2>
       <div class="cards">
         <div class="card">
-          <h3>ESPFormer: Doubly Stochastic Attention with Expected Sliced Transport Plans</h3>
-          <p style="color:var(--muted); margin:8px 0 12px;"> href="https://icml.cc/virtual/2025/poster/45096" target="ICML2025" 6</p>
-          <div class="chips">
-            <span class="chip">Attention</span>
-            <span class="chip">Optimal Transport</span>
-            <span class="chip">Sliced OT</span>
-          </div>
+          <h3>ESPFormer</h3>
+          <p style="color:var(--muted); margin:8px 0 12px;">
+            <a href="https://arxiv.org/pdf/2502.07962" target="_blank">Doubly Stochastic Attention with Expected Sliced Transport Plans</a>, ICML 2025
+          </p>
         </div>
-        <!-- Add more cards here as needed -->
+        <div class="card">
+          <h3>Linear Spherical Sliced OT</h3>
+          <p style="color:var(--muted); margin:8px 0 12px;">
+            <a href="https://arxiv.org/pdf/2411.06055" target="_blank">A Fast Metric for Comparing Spherical Data</a>, ICLR 2025 (spotlight)
+          </p>
+        </div>
+        <div class="card">
+          <h3>Expected Sliced Transport Plans</h3>
+          <p style="color:var(--muted); margin:8px 0 12px;">
+            <a href="https://arxiv.org/pdf/2410.12176" target="_blank">Variance-Reduced Transport with Informative Slices</a>, ICLR 2025
+          </p>
+        </div>
       </div>
     </section>
 
@@ -251,9 +150,10 @@
     <footer>
       <div>Made with ⚡ on <strong>ashkan13776.github.io</strong></div>
       <div class="footer-social">
-        <a href="mailto:ashkan@vanderbilt.edu" title="Email"><i class="fas fa-envelope"></i></a>
+        <a href="mailto:ashkan.shahbazi@vanderbilt.edu" title="Email"><i class="fas fa-envelope"></i></a>
         <a href="https://github.com/Ashkan13776" title="GitHub" target="_blank" rel="noreferrer noopener"><i class="fab fa-github"></i></a>
         <a href="https://www.linkedin.com/in/ashkan-shahbazi-391b12161/" title="LinkedIn" target="_blank" rel="noreferrer noopener"><i class="fab fa-linkedin"></i></a>
+        <a href="https://scholar.google.com/citations?user=lzdU2j8AAAAJ&hl=en" title="Google Scholar" target="_blank" rel="noreferrer noopener"><i class="fas fa-graduation-cap"></i></a>
       </div>
     </footer>
   </div>
