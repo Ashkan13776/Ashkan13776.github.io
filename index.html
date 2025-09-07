@@ -1,166 +1,261 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ashkan Shahbaiz</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Inter:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="Ashkan Shahbazi — Fourth year CS PhD student working on LLMs, attention, and optimal transport." />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Inter:wght@300;400;600;800&family=Space+Mono&display=swap" rel="stylesheet" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    :root {
-      --gold: #D4A574; 
-      --link-blue: #4B0082;
-      --text-black: #2c2c2c;
-      --text-gray: #666666;
-      --border-light: #E5E5E5;
+    :root{
+      /* Boyish, modern palette */
+      --ink: #0b1220;           /* near-black navy */
+      --navy: #121a2b;          /* deep navy bg */
+      --slate: #1c2741;         /* card bg */
+      --steel: #2a3a64;         /* accents */
+      --cyan: #46c7f2;          /* links + highlights */
+      --amber: #ffcc66;         /* accent for chips/icons */
+      --text: #e9edf5;          /* primary text */
+      --muted: #a9b4cf;         /* secondary text */
+      --border: #2b375a;        /* borders */
+      --chip-bg: rgba(255,255,255,0.06);
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius: 16px;
     }
 
-    body {
-      font-family: 'Bodoni Moda', Georgia, serif;
-      font-size: 16px;
-      line-height: 1.6;
-      color: var(--text-black);
-      background: linear-gradient(135deg, 
-        #f2e6f9 0%,   /* light lavender */
-        #e8d8f0 50%, 
-        #f0e8f9 100%
-      );
+    html,body{ height:100%; }
+    body{
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color: var(--text);
+      background: radial-gradient(1200px 600px at 15% 10%, #1b2550 0%, transparent 60%),
+                  radial-gradient(1000px 700px at 80% 20%, #12203a 0%, transparent 55%),
+                  linear-gradient(160deg, var(--navy), var(--ink));
       background-attachment: fixed;
-      min-height: 100vh;
     }
 
-    .header {
-      padding: 2vw 3vw;
-      position: relative;
-      background: rgba(255,255,255,0.5);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    a{ color: var(--cyan); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .container{ max-width: 1100px; margin: 0 auto; padding: 28px 24px 80px; }
+
+    /* Header */
+    .header{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 16px 0 8px; border-bottom: 1px solid var(--border);
+    }
+    .brand{
+      font-weight:800; letter-spacing:0.3px; font-size: clamp(18px, 1.4vw, 22px);
+    }
+    .nav-social{ display:flex; gap:18px; font-size:20px; }
+    .nav-social a{ transition: transform .2s ease; }
+    .nav-social a:hover{ transform: translateY(-2px); }
+
+    /* Hero */
+    .hero{
+      display:flex; gap:36px; align-items:center; justify-content:space-between;
+      margin-top: 32px; flex-wrap: wrap;
+    }
+    .pfp{
+      width: min(360px, 92vw); aspect-ratio: 4/5; object-fit: cover; border-radius: var(--radius);
+      box-shadow: var(--shadow); border: 1px solid var(--border);
+      transition: transform .3s ease;
+    }
+    .pfp:hover{ transform: scale(1.02); }
+
+    .hero-text{ flex: 1 1 480px; min-width: 280px; }
+    h1.greeting{
+      font-family: 'Bodoni Moda', serif;
+      font-size: clamp(28px, 4vw, 44px); line-height:1.2; letter-spacing:.2px; margin-bottom: 8px;
+    }
+    .subtitle{
+      color: var(--muted); font-weight: 400; font-size: clamp(15px, 1.4vw, 18px);
     }
 
-    .header-inner {
-      max-width: 1400px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .chips{ margin-top:14px; display:flex; flex-wrap:wrap; gap:10px; }
+    .chip{
+      border: 1px solid var(--border); background: var(--chip-bg);
+      padding: 6px 10px; border-radius: 999px; font-size:13px; color: var(--muted);
     }
 
-    .header-title { font-size: 28px; font-weight: 600; }
-    .header-title a { color: var(--gold); text-decoration: none; }
-
-    .content-card {
-      display: flex;
-      gap: 4vw;
-      align-items: center;
-      max-width: 1000px;
-      margin: 50px auto;
-      padding: 0 5vw;
+    .intro{
+      margin-top: 18px; font-size: clamp(16px, 1.4vw, 18px); color: var(--text); max-width: 60ch;
     }
 
-    .image-section {
-      flex: 0 0 40%;
+    /* Section wrapper */
+    .section{ margin-top: 42px; }
+    .section h2{
+      font-size: clamp(18px, 2vw, 22px);
+      border-left: 4px solid var(--cyan);
+      padding-left: 10px; margin-bottom: 16px; letter-spacing:.2px;
     }
 
-    .profile-image {
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      transition: transform 0.3s ease;
+    /* News */
+    .news{
+      display:grid; gap:16px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     }
-    .profile-image:hover {
-      transform: scale(1.05);
+    .news-card{
+      background: var(--slate); border:1px solid var(--border); border-radius: var(--radius);
+      padding:16px; box-shadow: var(--shadow); display:flex; gap:12px;
+    }
+    .news-icon{
+      flex: 0 0 36px; height:36px; display:grid; place-items:center;
+      border-radius: 10px; background: var(--chip-bg); border:1px solid var(--border); color: var(--amber);
+    }
+    .news-body h3{ font-size: 16px; margin-bottom: 6px; }
+    .news-meta{ font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .news-body p{ font-size: 14px; color: var(--text); }
+
+    /* Two-column blocks */
+    .cards{
+      display:grid; gap:18px;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+    .card{
+      background: var(--slate); border:1px solid var(--border); border-radius: var(--radius);
+      padding:18px; box-shadow: var(--shadow);
+    }
+    .card h3{ font-size: 16px; margin-bottom: 8px; }
+    .list{ list-style:none; color: var(--muted); }
+    .list li{ padding-left: 18px; position:relative; margin: 8px 0; }
+    .list li::before{
+      content: "•"; position:absolute; left:0; color: var(--cyan);
     }
 
-    .text-section {
-      flex: 1;
+    /* Footer */
+    footer{
+      margin-top: 60px; padding-top: 18px;
+      border-top: 1px solid var(--border); color: var(--muted); text-align:center;
     }
+    .footer-social{ margin-top: 10px; display:flex; gap:18px; justify-content:center; font-size:20px; }
+    .footer-social a{ color: var(--cyan); }
 
-    .greeting { font-size: clamp(26px, 4vw, 38px); margin-bottom: 10px; }
-    .greeting-subtitle { font-size: clamp(18px, 2vw, 22px); font-weight: 300; color: var(--link-blue); }
-
-    .intro { margin: 30px 0; font-size: clamp(18px, 1.5vw, 22px); max-width: 600px; }
-
-    .status-list { list-style: none; padding-left: 20px; }
-    .status-list li { margin-bottom: 12px; }
-
-    .footer {
-      border-top: 1px solid var(--border-light);
-      padding: 30px;
-      margin-top: 50px;
-      text-align: center;
-      font-size: 14px;
-      color: var(--text-gray);
-    }
-
-    .footer-social {
-      margin-top: 15px;
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-    }
-    .footer-social a { color: var(--link-blue); font-size: 20px; transition: transform 0.3s; }
-    .footer-social a:hover { transform: translateY(-3px); }
-
-    @media (max-width: 768px) {
-      .content-card { flex-direction: column; text-align: center; }
-      .image-section { width: 70%; margin-bottom: 20px; }
+    @media (max-width: 840px){
+      .hero{ gap:22px; }
     }
   </style>
 </head>
 <body>
-  <header class="header">
-    <div class="header-inner">
-      <div class="header-title">
-        <a href="/">Ashkan Shahbaiz</a>
-      </div>
-      <div class="footer-social">
-        <a href="mailto:ashkan@vanderbilt.edu" title="Email"><i class="fas fa-envelope"></i></a>
-        <a href="https://github.com/Ashkan-Shahbaiz" title="GitHub" target="_blank"><i class="fab fa-github"></i></a>
-        <a href="https://www.linkedin.com/in/ashkan-shahbaiz" title="LinkedIn" target="_blank"><i class="fab fa-linkedin"></i></a>
-      </div>
-    </div>
-  </header>
+  <div class="container">
+    <!-- Header -->
+    <header class="header" role="banner">
+      <div class="brand"><a href="/" style="text-decoration:none; color:var(--text)">Ashkan Shahbaiz</a></div>
+      <nav class="nav-social" aria-label="social">
+        <a href="mailto:ashkan.shahbazi@vanderbilt.edu" title="Email"><i class="fas fa-envelope"></i></a>
+        <a href="https://github.com/Ashkan13776" title="GitHub" target="_blank" rel="noreferrer noopener"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/ashkan-shahbazi-391b12161/" title="LinkedIn" target="_blank" rel="noreferrer noopener"><i class="fab fa-linkedin"></i></a>
+      </nav>
+    </header>
 
-  <main>
-    <div class="content-card">
-      <!-- Profile picture section -->
-      <div class="image-section">
-        <img src="images/profile.jpg" alt="Ashkan Shahbaiz" class="profile-image">
-      </div>
+    <!-- Hero -->
+    <section class="hero">
+      <img src="images/ashkan.jpeg" alt="Ashkan" class="pfp" />
 
-      <!-- Text content -->
-      <div class="text-section">
+      <div class="hero-text">
         <h1 class="greeting">Hi, I’m Ashkan 👋</h1>
-        <h2 class="greeting-subtitle">I love LLMs, I love attention! xD and I love my cat Shifu 🐾</h2>
+        <p class="subtitle">CS PhD @ Vanderbilt • LLMs, attention, & optimal transport</p>
+
+        <div class="chips" aria-label="interests">
+          <span class="chip">Transformers & LLMs</span>
+          <span class="chip">Optimal Transport</span>
+          <span class="chip">Applied Mathematics</span>
+          <span class="chip">Shifu 🐾</span>
+        </div>
 
         <p class="intro">
-          I’m a PhD student at Vanderbilt University working on machine learning, optimal transport, 
-          and attention mechanisms. You’ll often find me thinking about meta-learning, transformers, 
-          and calibrating confidence in large language models.
+          I build and study attention mechanisms and uncertainty for large language models. My work mixes optimal transport with pragmatic engineering for reliable, scalable systems.
         </p>
+      </div>
+    </section>
 
-        <div class="current-status">
-          <h3>Recent Updates:</h3>
-          <ul class="status-list">
-            <li>🌟 Working on LLM uncertainty calibration & attention mechanisms</li>i>
-            <li>🐈 Shifu says hi!</li>
+    <!-- News -->
+    <section class="section" id="news">
+      <h2>News</h2>
+      <div class="news">
+        <!-- 1) Instacart internship -->
+        <article class="news-card">
+          <div class="news-icon"><i class="fa-solid fa-robot"></i></div>
+          <div class="news-body">
+            <h3>Joining Instacart (Fall 2025)</h3>
+            <div class="news-meta">Updated: Sep 7, 2025</div>
+            <p>I’m joining Instacart as a Machine Learning PhD Intern (Fall 2025) to work on LLMs and prompt optimization.</p>
+          </div>
+        </article>
+
+        <!-- 2) ESPFormer accepted -->
+        <article class="news-card">
+          <div class="news-icon"><i class="fa-solid fa-award"></i></div>
+          <div class="news-body">
+            <h3>ICML 2025: ESPFormer accepted 🎉</h3>
+            <div class="news-meta">Updated: Sep 7, 2025</div>
+            <p>Our paper <em>“ESPFormer: Doubly Stochastic Attention with Expected Sliced Transport Plans”</em> has been accepted to ICML 2025.</p>
+          </div>
+        </article>
+
+        <!-- 3) Shifu -->
+        <article class="news-card">
+          <div class="news-icon"><i class="fa-solid fa-cat"></i></div>
+          <div class="news-body">
+            <h3>Shifu says hi</h3>
+            <div class="news-meta">Updated: Sep 7, 2025</div>
+            <p>Chief Morale Officer 🐈‍⬛ checking in and purring about attention heads.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Optional sections (keep/edit/remove as you like) -->
+    <section class="section">
+      <h2>Research Focus</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>Attention & OT</h3>
+          <ul class="list">
+            <li>Doubly-stochastic attention via expected sliced transport</li>
+            <li>Linear/approximate attention with transport priors</li>
+            <li>Efficient calibration & confidence for LLMs</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Reliable LLM Systems</h3>
+          <ul class="list">
+            <li>Prompt optimization & evaluation pipelines</li>
+            <li>Uncertainty estimation for controllable LLM behavior</li>
           </ul>
         </div>
       </div>
-    </div>
-  </main>
+    </section>
 
-  <footer class="footer">
-    <div>Made with 💜 on Ashkan-Shahbaiz.github.io</div>
-    <div class="footer-social">
-      <a href="mailto:ashkan@vanderbilt.edu"><i class="fas fa-envelope"></i></a>
-      <a href="https://github.com/ashkan13776"><i class="fab fa-github"></i></a>
-      <a href="https://www.linkedin.com/in/ashkan-shahbazi-391b12161/"><i class="fab fa-linkedin"></i></a>
-    </div>
-  </footer>
+    <section class="section">
+      <h2>Selected Papers</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>ESPFormer: Doubly Stochastic Attention with Expected Sliced Transport Plans</h3>
+          <p style="color:var(--muted); margin:8px 0 12px;">ICML 2025 (to appear)</p>
+          <div class="chips">
+            <span class="chip">Attention</span>
+            <span class="chip">Optimal Transport</span>
+            <span class="chip">Sliced OT</span>
+          </div>
+        </div>
+        <!-- Add more cards here as needed -->
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div>Made with ⚡ on <strong>ashkan13776.github.io</strong></div>
+      <div class="footer-social">
+        <a href="mailto:ashkan@vanderbilt.edu" title="Email"><i class="fas fa-envelope"></i></a>
+        <a href="https://github.com/Ashkan13776" title="GitHub" target="_blank" rel="noreferrer noopener"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/ashkan-shahbazi-391b12161/" title="LinkedIn" target="_blank" rel="noreferrer noopener"><i class="fab fa-linkedin"></i></a>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
