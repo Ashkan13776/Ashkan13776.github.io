@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ashkan Shahbaiz</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Inter:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --gold: #D4A574; 
+      --link-blue: #4B0082;
+      --text-black: #2c2c2c;
+      --text-gray: #666666;
+      --border-light: #E5E5E5;
+    }
+
+    body {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-black);
+      background: linear-gradient(135deg, 
+        #f2e6f9 0%,   /* light lavender */
+        #e8d8f0 50%, 
+        #f0e8f9 100%
+      );
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+
+    .header {
+      padding: 2vw 3vw;
+      position: relative;
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-title {
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .header-title a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    .greeting {
+      font-size: clamp(26px, 4vw, 38px);
+      margin-bottom: 10px;
+    }
+
+    .greeting-subtitle {
+      font-size: clamp(18px, 2vw, 22px);
+      font-weight: 300;
+      color: var(--link-blue);
+    }
+
+    .intro {
+      margin: 30px 0;
+      font-size: clamp(18px, 1.5vw, 22px);
+      max-width: 600px;
+    }
+
+    .status-list {
+      list-style: none;
+      padding-left: 20px;
+    }
+    .status-list li {
+      margin-bottom: 12px;
+    }
+
+    .footer {
+      border-top: 1px solid var(--border-light);
+      padding: 30px;
+      margin-top: 50px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-gray);
+    }
+
+    .footer-social {
+      margin-top: 15px;
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .footer-social a {
+      color: var(--link-blue);
+      font-size: 20px;
+      transition: transform 0.3s;
+    }
+    .footer-social a:hover {
+      transform: translateY(-3px);
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-title">
+        <a href="/">Ashkan Shahbaiz</a>
+      </div>
+      <div class="footer-social">
+        <a href="mailto:ashkan@vanderbilt.edu" title="Email"><i class="fas fa-envelope"></i></a>
+        <a href="https://github.com/Ashkan-Shahbaiz" title="GitHub" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/ashkan-shahbaiz" title="LinkedIn" target="_blank"><i class="fab fa-linkedin"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container" style="padding: 5vw; max-width: 1000px; margin: auto;">
+    <h1 class="greeting">Hi, I’m Ashkan 👋</h1>
+    <h2 class="greeting-subtitle">I love LLMs, I love attention! xD and I love my cat Shifu 🐾</h2>
+
+    <p class="intro">
+      I’m a PhD student at Vanderbilt University working on machine learning, optimal transport, 
+      and attention mechanisms. You’ll often find me thinking about meta-learning, transformers, 
+      and calibrating confidence in large language models.
+    </p>
+
+    <div class="current-status">
+      <h3>Recent Updates:</h3>
+      <ul class="status-list">
+        <li>🌟 Working on LLM uncertainty calibration & attention mechanisms</li>
+        <li>🚀 Joined MINT Lab with <a href="https://skolouri.github.io/" target="_blank">Prof. Soheil Kolouri</a></li>
+        <li>🐈 Shifu says hi!</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div>Made with 💜 on Ashkan-Shahbaiz.github.io</div>
+    <div class="footer-social">
+      <a href="mailto:ashkan@vanderbilt.edu"><i class="fas fa-envelope"></i></a>
+      <a href="https://github.com/Ashkan-Shahbaiz"><i class="fab fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/ashkan-shahbaiz"><i class="fab fa-linkedin"></i></a>
+    </div>
+  </footer>
+</body>
+</html>
