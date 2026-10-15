@@ -2,458 +2,1203 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Ashkan Shahbazi</title>
-  <meta name="description" content="Ashkan Shahbazi — PhD candidate in Computer Science at Vanderbilt University working on attention mechanisms, LLMs, and geometric deep learning." />
+  <meta name="description" content="Ashkan Shahbazi, PhD candidate in Computer Science at Vanderbilt University. Research on efficient LLM inference: efficient attention, KV cache retrieval for long-context decoding, and adaptive model cascades, grounded in optimal transport and geometric deep learning." />
+  <meta property="og:title" content="Ashkan Shahbazi" />
+  <meta property="og:description" content="PhD candidate at Vanderbilt working on efficient LLM inference, grounded in geometry." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧭</text></svg>" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet" />
+
+  <script>
+    // Apply a saved theme before first paint to avoid a flash.
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  </script>
 
   <style>
+    /* ---------- Tokens ---------- */
     :root {
-      --bg: #f9fafb;
-      --bg-alt: #ffffff;
-      --border: #e5e7eb;
-      --text-main: #111827;
-      --text-muted: #4b5563;
-      --accent: #2563eb;
-      --accent-soft: #eff6ff;
-      --link: #1d4ed8;
-      --radius: 10px;
+      color-scheme: light;
+      --paper: #f4f6f8;
+      --surface: #ffffff;
+      --ink: #18202c;
+      --muted: #586272;
+      --faint: #8a93a1;
+      --rule: #dce1e7;
+      --wine: #8e2c43;       /* source distribution, links */
+      --wine-soft: #f6e9ed;
+      --steel: #2c6a8a;      /* target distribution */
+      --steel-soft: #e5eff5;
+
+      --serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+      --sans: "Instrument Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+      --measure: 68ch;
+      --page: 1040px;
+      --gutter: clamp(18px, 4vw, 40px);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --paper: #11151b;
+        --surface: #171c24;
+        --ink: #e6e9ee;
+        --muted: #a0a9b6;
+        --faint: #6f7987;
+        --rule: #29303b;
+        --wine: #e78ea3;
+        --wine-soft: #2b1c22;
+        --steel: #80b8d5;
+        --steel-soft: #16252e;
+      }
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --paper: #11151b;
+      --surface: #171c24;
+      --ink: #e6e9ee;
+      --muted: #a0a9b6;
+      --faint: #6f7987;
+      --rule: #29303b;
+      --wine: #e78ea3;
+      --wine-soft: #2b1c22;
+      --steel: #80b8d5;
+      --steel-soft: #16252e;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
-
+    /* ---------- Base ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    :root {
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    html { scroll-behavior: smooth; scroll-padding-top: calc(72px + env(safe-area-inset-top, 0px)); }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     body {
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text-main);
-      background: var(--bg);
-      line-height: 1.6;
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16.5px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: var(--wine); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    a:hover { text-decoration-thickness: 2px; }
+    :focus-visible { outline: 2px solid var(--steel); outline-offset: 3px; border-radius: 3px; }
+    p { margin: 0 0 1em; }
+    h1, h2, h3 { margin: 0; font-weight: 500; }
+    button { font: inherit; color: inherit; }
+    .wrap { max-width: var(--page); margin: 0 auto; padding: 0 var(--gutter); }
+    .visually-hidden {
+      position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+      clip: rect(0 0 0 0); white-space: nowrap;
     }
 
-    a { color: var(--link); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
-    .page { max-width: 980px; margin: 0 auto; padding: 24px 20px 48px; }
-
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 14px;
-      margin-bottom: 20px;
-      gap: 20px;
+    /* ---------- Top bar ---------- */
+    .topbar {
+      position: sticky;
+      top: env(safe-area-inset-top, 0px);
+      z-index: 20;
+      background: color-mix(in srgb, var(--paper) 88%, transparent);
+      backdrop-filter: saturate(1.4) blur(10px);
+      -webkit-backdrop-filter: saturate(1.4) blur(10px);
+      border-bottom: 1px solid var(--rule);
+    }
+    body::before {
+      content: ""; position: fixed; inset: 0 0 auto; z-index: 21;
+      height: env(safe-area-inset-top, 0px);
+      background: color-mix(in srgb, var(--paper) 88%, transparent);
+      backdrop-filter: saturate(1.4) blur(10px);
+    }
+    .topbar .wrap {
+      display: flex; align-items: center; gap: 20px; height: 56px;
+    }
+    .wordmark {
+      font-family: var(--serif); font-size: 19px; font-weight: 500;
+      color: var(--ink); text-decoration: none; white-space: nowrap;
+      opacity: 0; transform: translateY(4px);
+      transition: opacity .25s ease, transform .25s ease;
+    }
+    .topbar.scrolled .wordmark { opacity: 1; transform: none; }
+    .nav {
+      margin-left: auto; display: flex; gap: 4px; overflow-x: auto;
+      scrollbar-width: none; -ms-overflow-style: none;
+    }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav a {
+      color: var(--muted); text-decoration: none; font-size: 14.5px;
+      padding: 6px 10px; border-radius: 6px; white-space: nowrap;
+    }
+    .nav a:hover { color: var(--ink); background: var(--surface); }
+    .nav a[aria-current="true"] { color: var(--ink); background: var(--surface); box-shadow: inset 0 -2px 0 var(--wine); }
+    .theme-btn {
+      flex: none; width: 34px; height: 34px; display: grid; place-items: center;
+      border: 1px solid var(--rule); border-radius: 50%; background: transparent; cursor: pointer;
+      color: var(--muted);
+    }
+    .theme-btn:hover { color: var(--ink); background: var(--surface); }
+    @media (max-width: 640px) {
+      .wordmark { display: none; }
+      .nav { margin-left: 0; flex: 1; }
     }
 
-    .name-block h1 {
-      font-family: "Crimson Text", "Times New Roman", serif;
-      font-size: clamp(26px, 3vw, 32px);
-      font-weight: 600;
-      margin-bottom: 4px;
+    /* ---------- Hero ---------- */
+    .hero { padding: clamp(36px, 6vw, 64px) 0 26px; }
+    .hero-grid {
+      display: grid; grid-template-columns: auto minmax(0, 1fr);
+      gap: clamp(22px, 4vw, 44px); align-items: end;
+    }
+    .portrait {
+      width: clamp(116px, 15vw, 168px); aspect-ratio: 4 / 5; object-fit: cover;
+      object-position: 50% 30%;
+      border-radius: 10px; background: var(--rule);
+    }
+    .hero h1 {
+      font-family: var(--serif); font-weight: 500;
+      font-size: clamp(40px, 6.4vw, 66px); line-height: 1; letter-spacing: -0.015em;
+      margin-bottom: 10px;
+    }
+    .hero .role { color: var(--muted); font-size: 16px; margin: 0 0 14px; }
+    .lead {
+      font-family: var(--serif); font-size: clamp(21px, 2.4vw, 26px); line-height: 1.3;
+      max-width: 30ch; margin: 0;
+    }
+    .hero-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 14.5px; padding: 6px 13px; border-radius: 999px;
+      border: 1px solid var(--rule); background: var(--surface); color: var(--ink);
+      text-decoration: none; cursor: pointer;
+    }
+    .pill:hover { border-color: var(--wine); color: var(--wine); }
+    .pill.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .pill.primary:hover { background: var(--wine); border-color: var(--wine); color: var(--paper); }
+    @media (max-width: 560px) {
+      .hero-grid { grid-template-columns: 1fr; align-items: start; }
+      .portrait { width: 96px; }
     }
 
-    .name-block .title { font-size: 15px; color: var(--text-muted); }
+    /* ---------- Transport figure (the signature element) ---------- */
+    .figure {
+      margin: 6px 0 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+      background: var(--surface);
+    }
+    .figure-canvas-wrap { position: relative; height: clamp(210px, 30vw, 290px); }
+    #ot-canvas { width: 100%; height: 100%; display: block; cursor: ew-resize; touch-action: pan-y; }
+    .legend {
+      position: absolute; left: max(var(--gutter), calc((100% - var(--page)) / 2 + var(--gutter))); top: 14px; display: flex; gap: 14px;
+      font-size: 13px; color: var(--muted); pointer-events: none;
+    }
+    .legend span::before {
+      content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+      margin-right: 6px; vertical-align: 1px;
+    }
+    .legend .src::before { background: var(--wine); }
+    .legend .tgt::before { background: var(--steel); }
+    .figcaption {
+      display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px 28px; align-items: center;
+      padding: 14px 0 16px; font-size: 14px; color: var(--muted);
+    }
+    .figcaption p { margin: 0; max-width: 62ch; }
+    .controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .controls label { font-size: 13.5px; }
+    .controls input[type="range"] { width: 150px; accent-color: var(--wine); }
+    .readout { font-variant-numeric: tabular-nums; color: var(--ink); min-width: 13ch; }
+    .linkish {
+      background: none; border: 0; padding: 0; cursor: pointer; color: var(--wine);
+      text-decoration: underline; text-underline-offset: 3px; font-size: 13.5px;
+    }
+    @media (max-width: 760px) { .figcaption { grid-template-columns: 1fr; } }
 
-    nav.main-nav {
-      display: flex;
-      gap: 16px;
-      font-size: 14px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+    /* ---------- Sections ---------- */
+    section.block { padding: clamp(48px, 7vw, 76px) 0 0; }
+    .block-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 22px; flex-wrap: wrap; }
+    .block h2 { font-family: var(--serif); font-size: clamp(28px, 3.2vw, 34px); letter-spacing: -0.01em; line-height: 1.1; }
+    .block-note { color: var(--muted); font-size: 14.5px; margin: 0; }
+
+    /* About */
+    .about-grid { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: clamp(28px, 5vw, 64px); }
+    .bio p {
+      font-family: var(--serif); font-size: 19.5px; line-height: 1.62; max-width: var(--measure);
+    }
+    .bio p:last-child { margin-bottom: 0; }
+    .facts { font-size: 14.5px; display: grid; gap: 18px; align-content: start; }
+    .facts h3 { font-size: 14.5px; font-weight: 600; margin-bottom: 4px; }
+    .facts p, .facts ul { margin: 0; color: var(--muted); }
+    .facts ul { list-style: none; padding: 0; }
+    .facts li + li { margin-top: 4px; }
+    .facts .when { color: var(--faint); }
+    .email-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .copy-btn {
+      border: 1px solid var(--rule); background: var(--surface); border-radius: 6px;
+      font-size: 12.5px; padding: 2px 8px; cursor: pointer; color: var(--muted);
+    }
+    .copy-btn:hover { color: var(--ink); border-color: var(--muted); }
+    .tools { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tools span { font-size: 13px; padding: 2px 8px; border-radius: 4px; background: var(--steel-soft); color: var(--ink); }
+    @media (max-width: 820px) { .about-grid { grid-template-columns: 1fr; } }
+
+    /* Research tabs */
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 0; }
+    .tab {
+      border: 1px solid var(--rule); border-bottom: 0; background: transparent; cursor: pointer;
+      padding: 10px 16px; border-radius: 8px 8px 0 0; font-size: 15px; color: var(--muted);
+      position: relative; top: 1px;
+    }
+    .tab:hover { color: var(--ink); }
+    .tab[aria-selected="true"] { background: var(--surface); color: var(--ink); font-weight: 500; }
+    .tab[aria-selected="true"]::after {
+      content: ""; position: absolute; left: 12px; right: 12px; top: -1px; height: 2px; background: var(--wine);
+    }
+    .tabpanels { border: 1px solid var(--rule); background: var(--surface); border-radius: 0 8px 8px 8px; }
+    .panel { padding: clamp(20px, 3vw, 32px); display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(22px, 4vw, 48px); }
+    .panel[hidden] { display: none; }
+    .panel h3 { font-family: var(--serif); font-size: 23px; margin-bottom: 10px; line-height: 1.2; }
+    .panel p { color: var(--ink); max-width: 60ch; }
+    .panel .papers { font-size: 14.5px; color: var(--muted); margin: 0; }
+    .results { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; align-content: start; }
+    .results li { display: grid; grid-template-columns: 7.2ch minmax(0, 1fr); gap: 14px; align-items: baseline; border-top: 1px solid var(--rule); padding-top: 12px; }
+    .results li:first-child { border-top: 0; padding-top: 0; }
+    .results .num { font-family: var(--serif); font-size: 26px; line-height: 1; color: var(--wine); font-variant-numeric: lining-nums tabular-nums; }
+    .results .what { font-size: 14.5px; color: var(--muted); }
+    @media (max-width: 760px) {
+      .panel { grid-template-columns: 1fr; }
+      .tab { padding: 8px 12px; font-size: 14px; }
     }
 
-    nav.main-nav a { color: var(--text-muted); padding: 4px 0; }
-    nav.main-nav a:hover { color: var(--accent); text-decoration: none; }
-
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 3fr) minmax(0, 1.4fr);
-      gap: 24px;
-      margin-bottom: 28px;
-      align-items: start;
-    }
-
-    .hero-text p { font-size: 15px; margin-bottom: 10px; }
-    .hero-text .affiliation { font-size: 15px; color: var(--text-muted); margin-bottom: 6px; }
-    .hero-text .research-line { font-size: 15px; color: var(--text-muted); margin-bottom: 10px; }
-    .hero-text .contact { font-size: 14px; color: var(--text-muted); }
-    .hero-text .contact span { margin-right: 12px; }
-
-    .photo-wrap { display: flex; justify-content: flex-end; }
-
-    .photo {
-      width: 180px;
-      border-radius: var(--radius);
-      background: var(--bg-alt);
-      border: 1px solid var(--border);
-      object-fit: cover;
-    }
-
-    section { margin-bottom: 26px; }
-
-    section h2 {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 4px;
-    }
-
-    section .section-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; }
-
-    .news-list { list-style: none; font-size: 14px; }
-    .news-list li { margin-bottom: 6px; }
-    .news-date { font-weight: 500; margin-right: 8px; white-space: nowrap; }
-
-    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
-
+    /* Publications */
+    .pub-tools { display: grid; gap: 12px; margin-bottom: 8px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
     .chip {
-      font-size: 13px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--text-muted);
-      border: 1px solid #dbeafe;
+      border: 1px solid var(--rule); background: var(--surface); border-radius: 999px;
+      padding: 5px 12px; font-size: 14px; cursor: pointer; color: var(--muted);
+    }
+    .chip:hover { color: var(--ink); border-color: var(--muted); }
+    .chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .chip .count { opacity: .65; margin-left: 4px; font-variant-numeric: tabular-nums; }
+    .pub-row2 { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; }
+    .search {
+      flex: 1 1 240px; max-width: 360px; padding: 7px 12px; border-radius: 8px;
+      border: 1px solid var(--rule); background: var(--surface); color: var(--ink); font: inherit; font-size: 14.5px;
+    }
+    .search::placeholder { color: var(--faint); }
+    .toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 14.5px; color: var(--muted); cursor: pointer; }
+    .toggle input { accent-color: var(--wine); width: 16px; height: 16px; }
+    .pub-count { font-size: 13.5px; color: var(--faint); margin-left: auto; font-variant-numeric: tabular-nums; }
+
+    .pub-list { list-style: none; margin: 0; padding: 0; }
+    .pub { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px; padding: 18px 0; border-top: 1px solid var(--rule); }
+    .pub[hidden] { display: none; }
+    .pub-year { font-family: var(--serif); font-size: 18px; color: var(--muted); padding-top: 1px; font-variant-numeric: lining-nums; }
+    .pub.same-year { border-top-color: transparent; padding-top: 6px; }
+    .pub.same-year .pub-year { visibility: hidden; }
+    .pub-title { font-family: var(--serif); font-size: 19px; line-height: 1.3; font-weight: 500; margin-bottom: 4px; }
+    .pub-title a { color: var(--ink); text-decoration: none; }
+    .pub-title a:hover { color: var(--wine); text-decoration: underline; }
+    .pub-authors { font-size: 14.5px; color: var(--muted); margin: 0 0 6px; }
+    .pub-authors strong { color: var(--ink); font-weight: 600; }
+    .pub-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; font-size: 14px; }
+    .venue { color: var(--ink); font-weight: 500; }
+    .tag { font-size: 12.5px; padding: 1px 8px; border-radius: 4px; }
+    .tag.spot { background: var(--wine-soft); color: var(--wine); }
+    .tag.topic { background: var(--steel-soft); color: var(--ink); }
+    .pub details[open] { flex-basis: 100%; }
+    .pub summary { cursor: pointer; color: var(--wine); font-size: 14px; display: inline; list-style: none; }
+    .pub summary::-webkit-details-marker { display: none; }
+    .pub summary::before { content: "+ "; }
+    .pub details[open] summary::before { content: "\2212  "; }
+    .pub details p { margin: 8px 0 0; font-size: 15px; max-width: 70ch; color: var(--ink); }
+    .meta-line { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
+    .empty { padding: 28px 0; border-top: 1px solid var(--rule); color: var(--muted); }
+    .footnote { font-size: 13.5px; color: var(--faint); margin-top: 14px; border-top: 1px solid var(--rule); padding-top: 12px; }
+    @media (max-width: 560px) {
+      .pub { grid-template-columns: 1fr; gap: 4px; }
+      .pub.same-year .pub-year { display: none; }
+      .pub-count { margin-left: 0; }
     }
 
-    .plain-list { list-style: none; font-size: 14px; }
-    .plain-list li { margin-bottom: 4px; }
-
-    .pub-list { list-style: none; font-size: 14px; }
-    .pub-list li { margin-bottom: 8px; }
-    .pub-title { font-weight: 500; }
-    .pub-venue { font-style: italic; color: var(--text-muted); margin-left: 4px; }
-    .pub-authors { color: var(--text-muted); font-size: 13px; }
-
-    .inline-links { font-size: 14px; margin-top: 4px; }
-    .inline-links a { margin-right: 12px; }
-
-    .award-list { list-style: none; font-size: 14px; }
-    .award-list li { margin-bottom: 5px; }
-    .award-year { color: var(--text-muted); margin-left: 6px; font-size: 13px; }
-
-    footer {
-      border-top: 1px solid var(--border);
-      margin-top: 30px;
-      padding-top: 10px;
-      font-size: 12px;
-      color: var(--text-muted);
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
+    /* Timeline */
+    .timeline { list-style: none; margin: 0; padding: 0; position: relative; }
+    .timeline::before { content: ""; position: absolute; left: 150px; top: 8px; bottom: 8px; width: 1px; background: var(--rule); }
+    .timeline > li { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 0 28px; padding: 0 0 26px; position: relative; }
+    .timeline > li::before {
+      content: ""; position: absolute; left: 146px; top: 8px; width: 9px; height: 9px; border-radius: 50%;
+      background: var(--paper); border: 2px solid var(--steel);
+    }
+    .timeline > li.now::before { background: var(--wine); border-color: var(--wine); }
+    .t-when { font-size: 14px; color: var(--muted); padding-right: 20px; padding-top: 2px; font-variant-numeric: tabular-nums; }
+    .t-body { padding-left: 4px; }
+    .t-body h3 { font-size: 17px; font-weight: 600; }
+    .t-where { color: var(--muted); font-size: 14.5px; margin: 0 0 6px; }
+    .t-body ul { margin: 0; padding-left: 18px; color: var(--ink); font-size: 15px; max-width: 66ch; }
+    .t-body li { display: list-item; padding: 0; margin-bottom: 4px; }
+    .t-body li::before { display: none; }
+    @media (max-width: 640px) {
+      .timeline::before { left: 4px; }
+      .timeline > li { grid-template-columns: 1fr; padding-left: 24px; }
+      .timeline > li::before { left: 0; }
+      .t-body ul li { padding-left: 0; }
     }
 
-    .footer-links a { margin-right: 10px; }
+    /* News */
+    .news { list-style: none; margin: 0; padding: 0; }
+    .news > li { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px; padding: 10px 0; border-top: 1px solid var(--rule); font-size: 15.5px; }
+    .news > li[hidden] { display: none; }
+    .news .yr { font-family: var(--serif); color: var(--muted); font-size: 17px; }
+    .more-btn { margin-top: 14px; }
 
-    @media (max-width: 780px) {
-      header { flex-direction: column; align-items: flex-start; }
-      nav.main-nav { justify-content: flex-start; }
-      .hero { grid-template-columns: minmax(0, 1fr); }
-      .photo-wrap { justify-content: flex-start; }
-    }
+    /* Service grid */
+    .misc { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 28px 36px; }
+    .misc h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+    .misc ul { list-style: none; margin: 0; padding: 0; font-size: 14.5px; color: var(--muted); }
+    .misc li { margin-bottom: 9px; }
+    .misc li b { color: var(--ink); font-weight: 500; }
+
+    /* Footer */
+    footer { margin-top: clamp(56px, 8vw, 90px); border-top: 1px solid var(--rule); }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; padding-top: 18px; padding-bottom: 28px; font-size: 13.5px; color: var(--muted); }
+    footer nav { display: flex; gap: 16px; flex-wrap: wrap; }
   </style>
 </head>
 <body>
-  <div class="page">
-    <header>
-      <div class="name-block">
-        <h1>Ashkan Shahbazi</h1>
-        <div class="title">PhD Candidate in Computer Science, Vanderbilt University</div>
-      </div>
-      <nav class="main-nav">
+
+  <header class="topbar" id="topbar">
+    <div class="wrap">
+      <a class="wordmark" href="#top">Ashkan Shahbazi</a>
+      <nav class="nav" aria-label="Sections">
         <a href="#about">About</a>
         <a href="#research">Research</a>
         <a href="#publications">Publications</a>
-        <a href="#awards">Awards</a>
-        <a href="#cv">CV</a>
+        <a href="#experience">Experience</a>
+        <a href="#news">News</a>
+        <a href="#service">Service</a>
       </nav>
-    </header>
+      <button class="theme-btn" id="theme-btn" type="button" aria-label="Switch to dark theme">
+        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg>
+      </button>
+    </div>
+  </header>
 
-    <main>
-      <!-- About -->
-      <section id="about" class="hero">
-        <div class="hero-text">
-          <p class="affiliation">
-            I am a PhD candidate in Computer Science at Vanderbilt University, working in the Machine Intelligence and Neural Technologies (MINT) Lab advised by Prof. Soheil Kolouri.
-          </p>
-          <p class="research-line">
-            My research focuses on attention mechanisms, large language models, and geometric deep learning, often guided by ideas from applied mathematics and optimal transport. I am also interested in neural simulators and digital twin applications.
-          </p>
-          <p class="contact">
-            <span><i class="fa-regular fa-envelope"></i> ashkan.shahbazi@vanderbilt.edu</span>
-            <span><i class="fa-solid fa-location-dot"></i> Nashville, TN, USA</span>
-          </p>
-          <div class="inline-links" style="margin-top:6px;">
-            <a href="https://scholar.google.com" target="_blank" rel="noreferrer noopener">Google Scholar</a>
-            <a href="https://github.com/Ashkan13776" target="_blank" rel="noreferrer noopener">GitHub</a>
-            <a href="https://www.linkedin.com/in/ashkan-shahbazi-391b12161/" target="_blank" rel="noreferrer noopener">LinkedIn</a>
-          </div>
-          <div class="chip-row">
-            <span class="chip">Transformers and attention</span>
-            <span class="chip">Large language models</span>
-            <span class="chip">Optimal transport</span>
-            <span class="chip">Geometric deep learning</span>
-            <span class="chip">Digital twin simulators</span>
+  <main id="top">
+    <!-- ================= Hero ================= -->
+    <div class="hero">
+      <div class="wrap hero-grid">
+        <!-- Put your photo next to this file as ashkan.jpg. The data fallback at the bottom of the page is only for previews and can be deleted. -->
+        <img id="portrait" class="portrait" src="ashkan.jpg" alt="Portrait of Ashkan Shahbazi" width="168" height="210" onerror="window.__portraitFailed = true" />
+        <div>
+          <h1>Ashkan Shahbazi</h1>
+          <p class="role">PhD candidate in Computer Science, Vanderbilt University</p>
+          <p class="lead">I work on making large language models cheaper to run without making them worse.</p>
+          <div class="hero-links">
+            <a class="pill primary" href="my_cv.pdf" target="_blank" rel="noopener">Download CV</a>
+            <a class="pill" href="mailto:ashkan.shahbazi@vanderbilt.edu">Email</a>
+            <!-- TODO: replace with your Google Scholar profile URL -->
+            <a class="pill" href="https://scholar.google.com" target="_blank" rel="noopener noreferrer">Google Scholar</a>
+            <a class="pill" href="https://github.com/Ashkan13776" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a class="pill" href="https://www.linkedin.com/in/ashkan-shahbazi-391b12161/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           </div>
         </div>
-        <div class="photo-wrap">
-          <img src="ashkan.jpeg" alt="Portrait of Ashkan Shahbazi" class="photo" />
-        </div>
-      </section>
-
-      <!-- News -->
-      <section id="news">
-        <h2>News</h2>
-        <ul class="news-list">
-          <li>
-            <span class="news-date">2026</span>
-            Admitted with grant to the Machine Learning Summer School (MLSS) NYC 2026, Columbia University.
-          </li>
-          <li>
-            <span class="news-date">2026</span>
-            <a href="https://arxiv.org/abs/2603.06543" target="_blank" rel="noreferrer noopener">SurgFormer</a>, a transformer-based model for surgical deformation simulation supporting topological changes, posted to arXiv.
-          </li>
-          <li>
-            <span class="news-date">2026</span>
-            <a href="https://arxiv.org/abs/2509.23436" target="_blank" rel="noreferrer noopener">LOTFormer</a>, doubly stochastic linear attention via low-rank optimal transport, posted to arXiv.
-          </li>
-          <li>
-            <span class="news-date">2025</span>
-            Completed a Machine Learning PhD internship at Instacart (Content AI), working on LLM-based attribute extraction and confidence estimation.
-          </li>
-          <li>
-            <span class="news-date">2025</span>
-            Neural Augmented Kelvinlet for real-time tissue deformation modeling accepted to AAAI 2026.
-          </li>
-          <li>
-            <span class="news-date">2025</span>
-            ESPFormer accepted to ICML 2025.
-          </li>
-          <li>
-            <span class="news-date">2025</span>
-            Linear Spherical Sliced Optimal Transport and Expected Sliced Transport Plans accepted to ICLR 2025.
-          </li>
-          <li>
-            <span class="news-date">2024</span>
-            Stereographic Spherical Sliced Wasserstein Distances selected as a spotlight at ICML 2024.
-          </li>
-        </ul>
-      </section>
-
-      <!-- Research -->
-      <section id="research">
-        <h2>Research</h2>
-        <p style="font-size:14px; margin-bottom:6px;">
-          I work on attention mechanisms and representation learning, with a focus on transport-based structured attention,
-          linear and kernelized transformers, and geometric neural simulators for digital twin applications.
-        </p>
-        <p style="font-size:14px;">
-          Previously, I was an ML PhD intern on the Content AI team at Instacart, working on cost-efficient LLM cascades and
-          confidence estimation for large-scale catalog attribute extraction.
-        </p>
-      </section>
-
-      <!-- Publications -->
-      <section id="publications">
-        <h2>Publications and Preprints</h2>
-        <div class="section-subtitle">
-          See also: <a href="https://scholar.google.com" target="_blank" rel="noreferrer noopener">Google Scholar</a> for a complete list.
-        </div>
-
-        <h3 style="font-size:15px; margin-bottom:4px; margin-top:4px;">Conference papers</h3>
-        <ul class="pub-list">
-          <li>
-            <span class="pub-title">
-              <a href="https://arxiv.org/abs/2502.07962" target="_blank" rel="noreferrer noopener">
-                ESPFormer: Doubly Stochastic Attention with Expected Sliced Transport Plans
-              </a>
-            </span>
-            <span class="pub-venue">ICML 2025</span><br/>
-            <span class="pub-authors">A. Shahbazi, E. Akbari, D. Salehi, X. Liu, N. Naderializadeh, S. Kolouri</span>
-          </li>
-          <li>
-            <span class="pub-title">
-              <a href="https://arxiv.org/abs/2506.08043" target="_blank" rel="noreferrer noopener">
-                Neural Augmented Kelvinlet for Real-Time Soft Tissue Deformation Modeling
-              </a>
-            </span>
-            <span class="pub-venue">AAAI 2026</span><br/>
-            <span class="pub-authors">A. Shahbazi*, K. Pereira*, J. S. Heiselman, E. Akbari, A. C. Benson, S. Seifi, X. Liu, G. L. Johnston, J. Y. Wu, N. Simaan, M. I. Miga, S. Kolouri</span>
-          </li>
-          <li>
-            <span class="pub-title">
-              <a href="https://arxiv.org/abs/2411.06055" target="_blank" rel="noreferrer noopener">
-                Linear Spherical Sliced Optimal Transport: A Fast Metric for Comparing Spherical Data
-              </a>
-            </span>
-            <span class="pub-venue">ICLR 2025 (spotlight)</span><br/>
-            <span class="pub-authors">X. Liu, Y. Bai, R. D. Martín, K. Shi, A. Shahbazi, B. A. Landman, C. Chang, S. Kolouri</span>
-          </li>
-          <li>
-            <span class="pub-title">
-              <a href="https://arxiv.org/abs/2410.12176" target="_blank" rel="noreferrer noopener">
-                Expected Sliced Transport Plans
-              </a>
-            </span>
-            <span class="pub-venue">ICLR 2025</span><br/>
-            <span class="pub-authors">X. Liu, R. D. Martín, Y. Bai, A. Shahbazi, M. Thorpe, A. Aldroubi, S. Kolouri</span>
-          </li>
-          <li>
-            <span class="pub-title">
-              <a href="https://arxiv.org/abs/2402.02345" target="_blank" rel="noreferrer noopener">
-                Stereographic Spherical Sliced Wasserstein Distances
-              </a>
-            </span>
-            <span class="pub-venue">ICML 2024 (spotlight)</span><br/>
-            <span class="pub-authors">H. Tran*, Y. Bai*, A. Kothapalli*, A. Shahbazi, X. Liu, R. D. Martín, S. Kolouri</span>
-          </li>
-        </ul>
-
-        <h3 style="font-size:15px; margin-bottom:4px; margin-top:10px;">Workshop papers</h3>
-        <ul class="pub-list">
-          <li>
-            <span class="pub-title">
-              One Category One Prompt: Dataset Distillation Using Diffusion Models
-            </span>
-            <span class="pub-venue">SynData4CV @ CVPR 2026</span><br/>
-            <span class="pub-authors">A. Abbasi, A. Shahbazi, H. Pirsiavash, S. Kolouri</span>
-          </li>
-          <li>
-            <span class="pub-title">
-              Equivariant vs Invariant Layers: A Comparison of Backbone and Pooling for Point Cloud Classification
-            </span>
-            <span class="pub-venue">GRaM @ ICML 2024</span><br/>
-            <span class="pub-authors">A. Kothapalli, A. Shahbazi, X. Liu, R. Sheng, S. Kolouri</span>
-          </li>
-        </ul>
-
-        <h3 style="font-size:15px; margin-bottom:4px; margin-top:10px;">Preprints and under review</h3>
-        <ul class="pub-list">
-          <li>
-            <span class="pub-title">
-              <a href="https://arxiv.org/abs/2512.08061" target="_blank" rel="noreferrer noopener">
-                LUNA: Linear Universal Neural Attention with Generalization Guarantees
-              </a>
-            </span>
-            <span class="pub-venue">under review</span><br/>
-            <span class="pub-authors">A. Shahbazi*, P. He*, A. Abbasi, Y. Bai, X. Liu, E. Akbari, N. Naderializadeh, S. Kolouri</span>
-          </li>
-          <li>
-            <span class="pub-title">
-              <a href="https://arxiv.org/abs/2603.06543" target="_blank" rel="noreferrer noopener">
-                SurgFormer: Scalable Learning of Organ Deformation with Resection Support and Real-Time Inference
-              </a>
-            </span>
-            <span class="pub-venue">arXiv 2026</span><br/>
-            <span class="pub-authors">A. Shahbazi*, E. Akbari*, K. Pereira, J. S. Heiselman, A. C. Benson, G. L. Johnston, J. Y. Wu, N. Simaan, M. I. Miga, S. Kolouri</span>
-          </li>
-          <li>
-            <span class="pub-title">
-              <a href="https://arxiv.org/abs/2509.23436" target="_blank" rel="noreferrer noopener">
-                LOTFormer: Doubly Stochastic Linear Attention via Low-Rank Optimal Transport
-              </a>
-            </span>
-            <span class="pub-venue">arXiv 2025</span><br/>
-            <span class="pub-authors">A. Shahbazi, C. Thrash, Y. Bai, K. Hamm, N. Naderializadeh, S. Kolouri</span>
-          </li>
-          <li>
-            <span class="pub-title">
-              <a href="https://arxiv.org/abs/2605.13753" target="_blank" rel="noreferrer noopener">
-                MinGSGW: A Scalable Path to Gromov–Wasserstein
-              </a>
-            </span>
-            <span class="pub-venue">arXiv 2025</span><br/>
-            <span class="pub-authors">A. Shahbazi, X. Liu, P. He, S. Kolouri</span>
-          </li>
-          <li>
-            <span class="pub-title">
-              <a href="https://arxiv.org/abs/2411.10651" target="_blank" rel="noreferrer noopener">
-                Understanding Learning with Sliced Wasserstein Requires Rethinking Informative Slices
-              </a>
-            </span>
-            <span class="pub-venue">arXiv 2024</span><br/>
-            <span class="pub-authors">H. Tran*, Y. Bai*, A. Shahbazi*, J. R. Hershey, S. Kolouri</span>
-          </li>
-          <li>
-            <span class="pub-title">
-              <a href="https://arxiv.org/abs/2603.03808" target="_blank" rel="noreferrer noopener">
-                Vector Quantized Soft Label Compression for Dataset Distillation
-              </a>
-            </span>
-            <span class="pub-venue">arXiv 2025</span><br/>
-            <span class="pub-authors">A. Abbasi, A. Shahbazi, H. Pirsiavash, S. Kolouri</span>
-          </li>
-        </ul>
-      </section>
-
-      <!-- Awards -->
-      <section id="awards">
-        <h2>Awards and Honors</h2>
-        <ul class="award-list">
-          <li>
-            Machine Learning Summer School (MLSS) NYC 2026, admitted with grant — Columbia University
-            <span class="award-year">2026</span>
-          </li>
-          <li>
-            Lambda Research Grant Program ($2,000 in cloud compute credits)
-            <span class="award-year">2025</span>
-          </li>
-          <li>
-            Google Cloud Research Credits ($1,000 in cloud credits)
-            <span class="award-year">2025</span>
-          </li>
-          <li>
-            Ranked top 0.1% (335th of 140,000+) in Iran's National University Entrance Exam
-            <span class="award-year">2016</span>
-          </li>
-        </ul>
-      </section>
-
-      <!-- Service -->
-      <section id="service">
-        <h2>Service</h2>
-        <p style="font-size:14px; margin-bottom:6px;">
-          <strong>Reviewing:</strong> ICML (2025, 2026), ICLR (2025, 2026), NeurIPS (2025, 2026), AAAI (2026), ECCV (2026).
-        </p>
-        <p style="font-size:14px;">
-          <strong>Mentoring:</strong> Zhanqi Zhu (now M.Sc. student at USC), VISE Summer Fellow, Vanderbilt University, Summer 2023.
-        </p>
-      </section>
-
-      <!-- Talks -->
-      <section id="talks">
-        <h2>Talks</h2>
-        <ul class="plain-list">
-          <li>
-            <strong>Geometric Neural Simulators for Modeling Liver Tissue Deformation</strong> (oral).<br/>
-            13th Annual Symposium on Surgery, Intervention, and Engineering, Vanderbilt University, Nashville, TN, December 2024.
-          </li>
-        </ul>
-      </section>
-
-      <!-- CV -->
-      <section id="cv">
-        <h2>Curriculum Vitae</h2>
-        <p style="font-size:14px;">
-          A detailed academic CV is available here:
-          <a href="my_cv.pdf" target="_blank" rel="noreferrer noopener">download CV (PDF)</a>.
-        </p>
-      </section>
-    </main>
-
-    <footer>
-      <div>Last updated May 2026.</div>
-      <div class="footer-links">
-        <a href="mailto:ashkan.shahbazi@vanderbilt.edu"><i class="fa-regular fa-envelope"></i> Email</a>
-        <a href="https://github.com/Ashkan13776" target="_blank" rel="noreferrer noopener"><i class="fab fa-github"></i> GitHub</a>
-        <a href="https://scholar.google.com" target="_blank" rel="noreferrer noopener"><i class="fa-solid fa-graduation-cap"></i> Scholar</a>
       </div>
-    </footer>
-  </div>
+    </div>
+
+    <!-- ================= Interactive transport figure ================= -->
+    <figure class="figure" aria-labelledby="fig-cap">
+      <div class="figure-canvas-wrap">
+        <canvas id="ot-canvas" role="img" aria-label="Two point clouds, a ring and two clusters, connected by lines showing a transport plan that changes with the slicing direction."></canvas>
+        <div class="legend" aria-hidden="true"><span class="src">source</span><span class="tgt">target</span></div>
+      </div>
+      <div class="wrap figcaption">
+        <p id="fig-cap">A sliced transport plan, computed live: project both point clouds onto one direction, sort, and match them in order. Every direction gives a different plan. Move across the figure or use the slider to explore; ideas like this sit underneath ESPFormer and MinGSGW.</p>
+        <div class="controls">
+          <label for="slice-angle">Slice angle</label>
+          <input id="slice-angle" type="range" min="0" max="179" step="1" value="30" />
+          <span class="readout" id="readout" aria-live="polite">30°</span>
+          <button class="linkish" id="best-btn" type="button">Show the best slice</button>
+        </div>
+      </div>
+    </figure>
+
+    <!-- ================= About ================= -->
+    <section class="block" id="about">
+      <div class="wrap">
+        <div class="block-head"><h2>About</h2></div>
+        <div class="about-grid">
+          <div class="bio">
+            <p>I'm a PhD candidate in Computer Science at Vanderbilt University, where I work in the Machine Intelligence and Neural Technologies (MINT) Lab with Prof. Soheil Kolouri. My research targets the compute and memory cost of LLM inference: attention that scales, KV caches that hold up over long contexts, and model cascades that send each query to the cheapest model that can handle it.</p>
+            <p>Much of that work starts from geometry. Optimal transport offers a principled answer to which tokens should attend to which, and it led to ESPFormer (ICML 2025), which computes doubly stochastic attention in a single pass without Sinkhorn iterations, and LOTFormer, which brings it to linear time. My latest project, OVAL, rethinks how KV cache pages are summarized for retrieval during long-context decoding, weighting directions by their effect on the attention output rather than on the keys alone.</p>
+            <p>I care about these ideas holding up outside the lab. At Instacart, I deployed a multi-LLM cascade for catalog attribute extraction that matches the F1 of running o3 on every product at 75–80% lower cost. With clinical and engineering collaborators, I also build real-time neural simulators of soft-tissue deformation and cutting for surgical simulation (AAAI 2026, U.S. patent application). Before Vanderbilt, I studied Biomedical Engineering at Amirkabir University of Technology in Tehran.</p>
+          </div>
+          <aside class="facts" aria-label="Quick facts">
+            <div>
+              <h3>Contact</h3>
+              <div class="email-row">
+                <a href="mailto:ashkan.shahbazi@vanderbilt.edu">ashkan.shahbazi@vanderbilt.edu</a>
+                <button class="copy-btn" id="copy-email" type="button" data-email="ashkan.shahbazi@vanderbilt.edu">Copy</button>
+              </div>
+              <p>Nashville, Tennessee</p>
+            </div>
+            <div>
+              <h3>Education</h3>
+              <ul>
+                <li>Ph.D. Computer Science, Vanderbilt University <span class="when">2022 to 2027 (expected)</span></li>
+                <li>B.Sc. Biomedical Engineering, Amirkabir University of Technology <span class="when">2016 to 2020</span></li>
+              </ul>
+            </div>
+            <div>
+              <h3>Tools I use daily</h3>
+              <div class="tools">
+                <span>PyTorch</span><span>Hugging Face</span><span>vLLM</span><span>FlashAttention</span><span>CUDA</span><span>CUTLASS</span><span>JAX</span><span>Nsight</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Research ================= -->
+    <section class="block" id="research">
+      <div class="wrap">
+        <div class="block-head">
+          <h2>Research</h2>
+          <p class="block-note">Four threads, one theme: accurate models that run fast and cheap.</p>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Research threads">
+          <button class="tab" role="tab" id="tab-kv" aria-controls="panel-kv" aria-selected="true">KV cache retrieval</button>
+          <button class="tab" role="tab" id="tab-attn" aria-controls="panel-attn" aria-selected="false" tabindex="-1">Efficient attention</button>
+          <button class="tab" role="tab" id="tab-cascade" aria-controls="panel-cascade" aria-selected="false" tabindex="-1">LLM cascades</button>
+          <button class="tab" role="tab" id="tab-surg" aria-controls="panel-surg" aria-selected="false" tabindex="-1">Surgical simulation</button>
+        </div>
+        <div class="tabpanels">
+          <div class="panel" role="tabpanel" id="panel-kv" aria-labelledby="tab-kv">
+            <div>
+              <h3>Retrieving the right KV pages for long-context decoding</h3>
+              <p>Long reasoning traces and 100K-token contexts make the KV cache the bottleneck. OVAL is a training-free page summary that weights key directions by how much they change the attention output, so retrieval picks the pages that actually matter. It keeps the same format and scoring cost as key-only spectral summaries at equal rank and page size.</p>
+              <p class="papers">Paper: OVAL (first author, arXiv 2026)</p>
+            </div>
+            <ul class="results">
+              <li><span class="num">9 / 9</span><span class="what">settings where OVAL is best (one tie) among 8 compressed methods, at a 2,048-token KV budget on DeepSeek-R1-Distill 7B to 14B</span></li>
+              <li><span class="num">+7.1</span><span class="what">percentage points over the strongest baseline on AIME24; +3.7 to +3.9 on average across MATH500, AIME24 and GPQA</span></li>
+              <li><span class="num">87.2%</span><span class="what">of full-cache accuracy at 100K+ tokens on InfiniteBench with Llama-3.1-8B, versus 83.9% for FreeKV</span></li>
+            </ul>
+          </div>
+
+          <div class="panel" role="tabpanel" id="panel-attn" aria-labelledby="tab-attn" hidden>
+            <div>
+              <h3>Attention built from optimal transport</h3>
+              <p>Softmax attention normalizes only one way. Doubly stochastic attention balances both queries and keys, but usually needs costly Sinkhorn iterations. ESPFormer gets there in one pass using expected sliced transport plans. LOTFormer makes it linear-time with low-rank transport through learned pivots, and LUNA learns the kernel of linear attention itself, with generalization guarantees.</p>
+              <p class="papers">Papers: ESPFormer (first author, ICML 2025), LOTFormer (first author), LUNA (co-first author)</p>
+            </div>
+            <ul class="results">
+              <li><span class="num">+2.6</span><span class="what">top-1 points over softmax on ImageNet-1K with DeiT-Tiny at comparable FLOPs (72.2 to 74.8), from LOTFormer</span></li>
+              <li><span class="num">1 pass</span><span class="what">doubly stochastic attention with no Sinkhorn loop; ESPFormer beats softmax and Sinkformer on image, point-cloud, sentiment and translation tasks</span></li>
+              <li><span class="num">O(n)</span><span class="what">cost in sequence length for LOTFormer and LUNA; converting fine-tuned BERT and ViT-B/16 to LUNA recovers most of their softmax accuracy</span></li>
+            </ul>
+          </div>
+
+          <div class="panel" role="tabpanel" id="panel-cascade" aria-labelledby="tab-cascade" hidden>
+            <div>
+              <h3>Cost-aware LLM cascades in production</h3>
+              <p>As an ML PhD intern on Instacart's Content AI team, I built and deployed a multi-LLM cascade for catalog attribute extraction: cheap models answer first, and only uncertain items escalate. I set the escalation rule by benchmarking three confidence estimators on a golden set, then distilled them into a lightweight five-level verifier that costs a fraction of the ensemble.</p>
+              <p class="papers">Instacart, Content AI, Sep to Nov 2025</p>
+            </div>
+            <ul class="results">
+              <li><span class="num">75–80%</span><span class="what">lower cost per item while matching the F1 of running o3 on every product</span></li>
+              <li><span class="num">150K</span><span class="what">products, with 50+ attributes extracted per catalog</span></li>
+              <li><span class="num">147K</span><span class="what">labeled samples in the golden set used to choose the escalation rule</span></li>
+            </ul>
+          </div>
+
+          <div class="panel" role="tabpanel" id="panel-surg" aria-labelledby="tab-surg" hidden>
+            <div>
+              <h3>Real-time neural simulators for surgery</h3>
+              <p>Finite element models are accurate but too slow for live surgical guidance. I train physics-informed neural models on FEM data to predict soft-tissue deformation and cutting in real time, from tissue handled by multiple graspers (Neural Augmented Kelvinlet) to whole organs with resection (SurgFormer).</p>
+              <p class="papers">Papers: Neural Augmented Kelvinlet (co-first author, AAAI 2026), SurgFormer (co-first author, arXiv 2026), U.S. patent application 63/998,405</p>
+            </div>
+            <ul class="results">
+              <li><span class="num">Tissue</span><span class="what">Neural Augmented Kelvinlet models multi-grasper soft-tissue deformation in real time (AAAI 2026)</span></li>
+              <li><span class="num">Organ</span><span class="what">SurgFormer scales to whole organs, including topological changes from resection, at real-time inference</span></li>
+              <li><span class="num">Patent</span><span class="what">application filed for hybrid AI-driven, physics-informed soft-tissue simulation</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Publications ================= -->
+    <section class="block" id="publications">
+      <div class="wrap">
+        <div class="block-head">
+          <h2>Publications</h2>
+          <p class="block-note">* equal contribution</p>
+        </div>
+
+        <div class="pub-tools">
+          <div class="chips" role="group" aria-label="Filter by topic" id="topic-chips">
+            <button class="chip" type="button" data-topic="all" aria-pressed="true">All</button>
+            <button class="chip" type="button" data-topic="attention" aria-pressed="false">Efficient attention and inference</button>
+            <button class="chip" type="button" data-topic="geometry" aria-pressed="false">Optimal transport and geometry</button>
+            <button class="chip" type="button" data-topic="surgery" aria-pressed="false">Surgical simulation</button>
+            <button class="chip" type="button" data-topic="distill" aria-pressed="false">Dataset distillation</button>
+          </div>
+          <div class="pub-row2">
+            <label class="visually-hidden" for="pub-search">Search publications</label>
+            <input class="search" id="pub-search" type="search" placeholder="Search titles, authors, venues" autocomplete="off" />
+            <label class="toggle"><input type="checkbox" id="first-only" /> First or co-first author only</label>
+            <span class="pub-count" id="pub-count" aria-live="polite"></span>
+          </div>
+        </div>
+
+        <ol class="pub-list" id="pub-list">
+          <li class="pub" data-topic="attention" data-first="true" data-year="2026">
+            <div class="pub-year">2026</div>
+            <div>
+              <h3 class="pub-title">OVAL: Output-Aware Local Page Bases for KV Cache Retrieval</h3>
+              <p class="pub-authors"><strong>A. Shahbazi</strong>, C. Thrash, S. Kolouri</p>
+              <div class="meta-line">
+                <span class="venue">arXiv 2026</span>
+                <details><summary>Summary</summary><p>A training-free KV page summary that weights key directions by their effect on the attention output. At a 2,048-token budget it is the best of 8 compressed methods in all 9 long-reasoning settings (one tie), up to +7.1 points on AIME24, and keeps 87.2% of full-cache accuracy at 100K+ tokens.</p></details>
+              </div>
+            </div>
+          </li>
+
+          <li class="pub" data-topic="geometry" data-first="false" data-year="2026">
+            <div class="pub-year">2026</div>
+            <div>
+              <h3 class="pub-title"><a href="https://arxiv.org/abs/2411.10651" target="_blank" rel="noopener noreferrer">A Case for Vanilla SWD: New Perspectives on Informative Slices, Sliced-Wasserstein Distances, and Learning Rates</a></h3>
+              <p class="pub-authors">H. Tran, Y. Bai, <strong>A. Shahbazi</strong>, J. R. Hershey, S. Kolouri</p>
+              <div class="meta-line"><span class="venue">TMLR 2026</span></div>
+            </div>
+          </li>
+
+          <li class="pub" data-topic="geometry" data-first="true" data-year="2026">
+            <div class="pub-year">2026</div>
+            <div>
+              <h3 class="pub-title"><a href="https://arxiv.org/abs/2605.13753" target="_blank" rel="noopener noreferrer">MinGSGW: A Scalable Path to Gromov–Wasserstein</a></h3>
+              <p class="pub-authors"><strong>A. Shahbazi</strong>, X. Liu, P. He, S. Kolouri</p>
+              <div class="meta-line">
+                <span class="venue">arXiv 2026</span>
+                <details><summary>Summary</summary><p>Scalable Gromov–Wasserstein matching between spaces that live in different geometries, built on sliced transport.</p></details>
+              </div>
+            </div>
+          </li>
+
+          <li class="pub" data-topic="surgery" data-first="true" data-year="2026">
+            <div class="pub-year">2026</div>
+            <div>
+              <h3 class="pub-title"><a href="https://arxiv.org/abs/2603.06543" target="_blank" rel="noopener noreferrer">SurgFormer: Scalable Learning of Organ Deformation with Resection Support and Real-Time Inference</a></h3>
+              <p class="pub-authors"><strong>A. Shahbazi</strong>*, E. Akbari*, K. Pereira, J. S. Heiselman, A. C. Benson, G. L. Johnston, J. Y. Wu, N. Simaan, M. I. Miga, S. Kolouri</p>
+              <div class="meta-line">
+                <span class="venue">arXiv 2026</span>
+                <details><summary>Summary</summary><p>A transformer that learns whole-organ deformation from FEM simulations, supports topological changes from resection, and runs in real time.</p></details>
+              </div>
+            </div>
+          </li>
+
+          <li class="pub" data-topic="surgery" data-first="true" data-year="2026">
+            <div class="pub-year">2026</div>
+            <div>
+              <h3 class="pub-title"><a href="https://arxiv.org/abs/2506.08043" target="_blank" rel="noopener noreferrer">Neural Augmented Kelvinlet for Real-Time Soft Tissue Deformation Modeling</a></h3>
+              <p class="pub-authors"><strong>A. Shahbazi</strong>*, K. Pereira*, J. S. Heiselman, E. Akbari, A. C. Benson, S. Seifi, X. Liu, G. L. Johnston, J. Y. Wu, N. Simaan, M. I. Miga, S. Kolouri</p>
+              <div class="meta-line">
+                <span class="venue">AAAI 2026</span>
+                <details><summary>Summary</summary><p>Combines analytical Kelvinlet solutions with a neural correction trained on FEM data to predict soft-tissue deformation under multiple graspers in real time.</p></details>
+              </div>
+            </div>
+          </li>
+
+          <li class="pub" data-topic="distill" data-first="false" data-year="2026">
+            <div class="pub-year">2026</div>
+            <div>
+              <h3 class="pub-title">One Category One Prompt: Dataset Distillation Using Diffusion Models</h3>
+              <p class="pub-authors">A. Abbasi, <strong>A. Shahbazi</strong>, H. Pirsiavash, S. Kolouri</p>
+              <div class="meta-line"><span class="venue">SynData4CV Workshop at CVPR 2026</span></div>
+            </div>
+          </li>
+
+          <li class="pub" data-topic="distill" data-first="false" data-year="2026">
+            <div class="pub-year">2026</div>
+            <div>
+              <h3 class="pub-title"><a href="https://arxiv.org/abs/2603.03808" target="_blank" rel="noopener noreferrer">Vector Quantized Soft Label Compression for Dataset Distillation</a></h3>
+              <p class="pub-authors">A. Abbasi, <strong>A. Shahbazi</strong>, H. Pirsiavash, S. Kolouri</p>
+              <div class="meta-line"><span class="venue">arXiv 2026</span></div>
+            </div>
+          </li>
+
+          <li class="pub" data-topic="attention" data-first="true" data-year="2025">
+            <div class="pub-year">2025</div>
+            <div>
+              <h3 class="pub-title"><a href="https://arxiv.org/abs/2502.07962" target="_blank" rel="noopener noreferrer">ESPFormer: Doubly Stochastic Attention with Expected Sliced Transport Plans</a></h3>
+              <p class="pub-authors"><strong>A. Shahbazi</strong>, E. Akbari, D. Salehi, X. Liu, N. Naderializadeh, S. Kolouri</p>
+              <div class="meta-line">
+                <span class="venue">ICML 2025</span>
+                <details><summary>Summary</summary><p>Doubly stochastic attention in a single pass, using expected sliced transport plans instead of iterative Sinkhorn normalization. Improves on softmax and Sinkformer across image, point-cloud, sentiment and translation tasks.</p></details>
+              </div>
+            </div>
+          </li>
+
+          <li class="pub" data-topic="attention" data-first="true" data-year="2025">
+            <div class="pub-year">2025</div>
+            <div>
+              <h3 class="pub-title"><a href="https://arxiv.org/abs/2509.23436" target="_blank" rel="noopener noreferrer">LOTFormer: Doubly Stochastic Linear Attention via Low-Rank Optimal Transport</a></h3>
+              <p class="pub-authors"><strong>A. Shahbazi</strong>, C. Thrash, Y. Bai, K. Hamm, N. Naderializadeh, S. Kolouri</p>
+              <div class="meta-line">
+                <span class="venue">arXiv 2025</span>
+                <details><summary>Summary</summary><p>Linear-time doubly stochastic attention through low-rank transport with learned pivots. On ImageNet-1K at comparable FLOPs it adds 2.6 top-1 points over softmax on DeiT-Tiny (72.2 to 74.8).</p></details>
+              </div>
+            </div>
+          </li>
+
+          <li class="pub" data-topic="attention" data-first="true" data-year="2025">
+            <div class="pub-year">2025</div>
+            <div>
+              <h3 class="pub-title"><a href="https://arxiv.org/abs/2512.08061" target="_blank" rel="noopener noreferrer">LUNA: Linear Universal Neural Attention with Generalization Guarantees</a></h3>
+              <p class="pub-authors"><strong>A. Shahbazi</strong>*, P. He*, A. Abbasi, Y. Bai, X. Liu, E. Akbari, N. Naderializadeh, S. Kolouri</p>
+              <div class="meta-line">
+                <span class="venue">arXiv 2025</span>
+                <details><summary>Summary</summary><p>Linear attention with a learned kernel. Converting fine-tuned BERT and ViT-B/16 from softmax to LUNA recovers most of their accuracy, well above fixed linearizations.</p></details>
+              </div>
+            </div>
+          </li>
+
+          <li class="pub" data-topic="geometry" data-first="false" data-year="2025">
+            <div class="pub-year">2025</div>
+            <div>
+              <h3 class="pub-title"><a href="https://arxiv.org/abs/2411.06055" target="_blank" rel="noopener noreferrer">Linear Spherical Sliced Optimal Transport: A Fast Metric for Comparing Spherical Data</a></h3>
+              <p class="pub-authors">X. Liu, Y. Bai, R. D. Martín, K. Shi, <strong>A. Shahbazi</strong>, B. A. Landman, C. Chang, S. Kolouri</p>
+              <div class="meta-line"><span class="venue">ICLR 2025</span><span class="tag spot">Spotlight</span></div>
+            </div>
+          </li>
+
+          <li class="pub" data-topic="geometry" data-first="false" data-year="2025">
+            <div class="pub-year">2025</div>
+            <div>
+              <h3 class="pub-title"><a href="https://arxiv.org/abs/2410.12176" target="_blank" rel="noopener noreferrer">Expected Sliced Transport Plans</a></h3>
+              <p class="pub-authors">X. Liu, R. D. Martín, Y. Bai, <strong>A. Shahbazi</strong>, M. Thorpe, A. Aldroubi, S. Kolouri</p>
+              <div class="meta-line">
+                <span class="venue">ICLR 2025</span>
+                <details><summary>Summary</summary><p>Builds full transport plans from sliced optimal transport by averaging the plans induced by individual slices. This is the theory behind ESPFormer.</p></details>
+              </div>
+            </div>
+          </li>
+
+          <li class="pub" data-topic="surgery" data-first="true" data-year="2025">
+            <div class="pub-year">2025</div>
+            <div>
+              <h3 class="pub-title">System and Method for Real-Time Soft Tissue Simulation via Hybrid AI-Driven Physics-Informed Modeling</h3>
+              <p class="pub-authors"><strong>A. Shahbazi</strong>, K. Pereira, J. S. Heiselman, E. Akbari, et al., N. Simaan</p>
+              <div class="meta-line"><span class="venue">U.S. Patent Application No. 63/998,405</span></div>
+            </div>
+          </li>
+
+          <li class="pub" data-topic="geometry" data-first="false" data-year="2024">
+            <div class="pub-year">2024</div>
+            <div>
+              <h3 class="pub-title"><a href="https://arxiv.org/abs/2402.02345" target="_blank" rel="noopener noreferrer">Stereographic Spherical Sliced Wasserstein Distances</a></h3>
+              <p class="pub-authors">H. Tran*, Y. Bai*, A. Kothapalli*, <strong>A. Shahbazi</strong>, X. Liu, R. D. Martín, S. Kolouri</p>
+              <div class="meta-line"><span class="venue">ICML 2024</span><span class="tag spot">Spotlight</span></div>
+            </div>
+          </li>
+
+          <li class="pub" data-topic="geometry" data-first="false" data-year="2024">
+            <div class="pub-year">2024</div>
+            <div>
+              <h3 class="pub-title">Equivariant vs Invariant Layers: A Comparison of Backbone and Pooling for Point Cloud Classification</h3>
+              <p class="pub-authors">A. Kothapalli, <strong>A. Shahbazi</strong>, X. Liu, R. Sheng, S. Kolouri</p>
+              <div class="meta-line"><span class="venue">GRaM Workshop at ICML 2024</span></div>
+            </div>
+          </li>
+        </ol>
+        <div class="empty" id="pub-empty" hidden>
+          No papers match these filters. <button class="linkish" id="pub-clear" type="button">Clear filters</button>
+        </div>
+        <!-- TODO: replace with your Google Scholar profile URL -->
+        <p class="footnote">The full, always-current list is on <a href="https://scholar.google.com" target="_blank" rel="noopener noreferrer">Google Scholar</a>.</p>
+      </div>
+    </section>
+
+    <!-- ================= Experience ================= -->
+    <section class="block" id="experience">
+      <div class="wrap">
+        <div class="block-head"><h2>Experience</h2></div>
+        <ol class="timeline">
+          <li class="now">
+            <div class="t-when">2022 to now</div>
+            <div class="t-body">
+              <h3>Graduate Research Assistant</h3>
+              <p class="t-where">MINT Lab, Department of Computer Science, Vanderbilt University</p>
+              <ul>
+                <li>Efficient LLM inference: KV cache retrieval for long-context decoding (OVAL) and transport-based attention (ESPFormer, LOTFormer, LUNA).</li>
+                <li>Geometric machine learning and real-time surgical simulation with collaborators in engineering and medicine.</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="t-when">Sep to Nov 2025</div>
+            <div class="t-body">
+              <h3>Machine Learning Engineer Intern (PhD)</h3>
+              <p class="t-where">Instacart, Content AI, remote</p>
+              <ul>
+                <li>Deployed a multi-LLM cascade for catalog attribute extraction (50+ attributes, about 150K products) that matches o3's F1 at 75–80% lower cost per item.</li>
+                <li>Benchmarked three confidence estimators on a 147K-sample golden set to set the escalation rule, then distilled them into a lightweight five-level verifier.</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="t-when">Spring 2024</div>
+            <div class="t-body">
+              <h3>Teaching Assistant, Geometric Deep Learning</h3>
+              <p class="t-where">Graduate course, Vanderbilt University</p>
+            </div>
+          </li>
+          <li>
+            <div class="t-when">2016 to 2020</div>
+            <div class="t-body">
+              <h3>B.Sc. in Biomedical Engineering</h3>
+              <p class="t-where">Amirkabir University of Technology, Tehran</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ================= News ================= -->
+    <section class="block" id="news">
+      <div class="wrap">
+        <div class="block-head"><h2>News</h2></div>
+        <ul class="news" id="news-list">
+          <li><span class="yr">2026</span><span>Posted <strong>OVAL</strong>, output-aware page summaries for KV cache retrieval in long-context decoding.</span></li>
+          <li><span class="yr">2026</span><span>"A Case for Vanilla SWD" accepted to <strong>TMLR</strong>.</span></li>
+          <li><span class="yr">2026</span><span>Admitted with a program grant to the Machine Learning Summer School (MLSS) NYC at Columbia University.</span></li>
+          <li><span class="yr">2026</span><span>"One Category One Prompt" accepted to the SynData4CV workshop at <strong>CVPR 2026</strong>.</span></li>
+          <li><span class="yr">2026</span><span><a href="https://arxiv.org/abs/2603.06543" target="_blank" rel="noopener noreferrer">SurgFormer</a> and <a href="https://arxiv.org/abs/2605.13753" target="_blank" rel="noopener noreferrer">MinGSGW</a> posted to arXiv.</span></li>
+          <li><span class="yr">2025</span><span>Completed an ML PhD internship on Instacart's Content AI team, shipping a cost-efficient LLM cascade for catalog attribute extraction.</span></li>
+          <li><span class="yr">2025</span><span>Neural Augmented Kelvinlet accepted to <strong>AAAI 2026</strong>; filed a U.S. patent application on real-time soft-tissue simulation.</span></li>
+          <li><span class="yr">2025</span><span><a href="https://arxiv.org/abs/2509.23436" target="_blank" rel="noopener noreferrer">LOTFormer</a> and <a href="https://arxiv.org/abs/2512.08061" target="_blank" rel="noopener noreferrer">LUNA</a> posted to arXiv.</span></li>
+          <li><span class="yr">2025</span><span>ESPFormer accepted to <strong>ICML 2025</strong>.</span></li>
+          <li><span class="yr">2025</span><span>Linear Spherical Sliced Optimal Transport (spotlight) and Expected Sliced Transport Plans accepted to <strong>ICLR 2025</strong>.</span></li>
+          <li><span class="yr">2024</span><span>Oral talk on geometric neural simulators for liver tissue deformation at the 13th Annual Symposium on Surgery, Intervention, and Engineering, Vanderbilt.</span></li>
+          <li><span class="yr">2024</span><span>Stereographic Spherical Sliced Wasserstein Distances selected as a spotlight at <strong>ICML 2024</strong>.</span></li>
+        </ul>
+        <button class="pill more-btn" id="news-more" type="button" aria-expanded="false" aria-controls="news-list">Show all news</button>
+      </div>
+    </section>
+
+    <!-- ================= Service, teaching, talks, honors ================= -->
+    <section class="block" id="service">
+      <div class="wrap">
+        <div class="block-head"><h2>Service, talks and honors</h2></div>
+        <div class="misc">
+          <div>
+            <h3>Reviewing</h3>
+            <ul>
+              <li><b>NeurIPS, ICML, ICLR</b><br />2025, 2026</li>
+              <li><b>AAAI, ECCV</b><br />2026</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Teaching and mentoring</h3>
+            <ul>
+              <li><b>Teaching Assistant, Geometric Deep Learning</b><br />Graduate course, Vanderbilt, Spring 2024</li>
+              <li><b>Mentor to Zhanqi Zhu</b><br />VISE Summer Fellow, Summer 2023 (now M.Sc. at USC)</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Talks</h3>
+            <ul>
+              <li><b>Geometric Neural Simulators for Modeling Liver Tissue Deformation</b><br />Oral, 13th Annual Symposium on Surgery, Intervention, and Engineering, Vanderbilt, December 2024</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Honors</h3>
+            <ul>
+              <li><b>MLSS NYC 2026</b>, admitted with program grant<br />Columbia University, 2026</li>
+              <li><b>Lambda Research Grant</b>, $2,000 compute<br />2025</li>
+              <li><b>Google Cloud Research Credits</b>, $1,000<br />2025</li>
+              <li><b>Ranked 335th of 140,000+</b> in Iran's national university entrance exam<br />2016</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>Last updated October 2026</span>
+      <nav aria-label="Elsewhere">
+        <a href="mailto:ashkan.shahbazi@vanderbilt.edu">Email</a>
+        <a href="https://github.com/Ashkan13776" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/in/ashkan-shahbazi-391b12161/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="my_cv.pdf" target="_blank" rel="noopener">CV</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    'use strict';
+    var root = document.documentElement;
+
+    /* ---------- Theme ---------- */
+    var themeBtn = document.getElementById('theme-btn');
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function isDark() {
+      var t = root.getAttribute('data-theme');
+      return t ? t === 'dark' : mq.matches;
+    }
+    function syncThemeBtn() {
+      themeBtn.setAttribute('aria-label', isDark() ? 'Switch to light theme' : 'Switch to dark theme');
+      document.dispatchEvent(new Event('themechange'));
+    }
+    themeBtn.addEventListener('click', function () {
+      var next = isDark() ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      syncThemeBtn();
+    });
+    if (mq.addEventListener) mq.addEventListener('change', syncThemeBtn);
+    syncThemeBtn();
+
+    /* ---------- Top bar: wordmark + active section ---------- */
+    var topbar = document.getElementById('topbar');
+    var hero = document.querySelector('.hero h1');
+    new IntersectionObserver(function (entries) {
+      topbar.classList.toggle('scrolled', !entries[0].isIntersecting);
+    }).observe(hero);
+
+    var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav a'));
+    var byId = {};
+    navLinks.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+    var navIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        navLinks.forEach(function (a) { a.removeAttribute('aria-current'); });
+        var link = byId[en.target.id];
+        if (link) link.setAttribute('aria-current', 'true');
+      });
+    }, { rootMargin: '-35% 0px -60% 0px' });
+    Object.keys(byId).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) navIO.observe(el);
+    });
+
+    /* ---------- Copy email ---------- */
+    var copyBtn = document.getElementById('copy-email');
+    copyBtn.addEventListener('click', function () {
+      var email = copyBtn.getAttribute('data-email');
+      var done = function () {
+        copyBtn.textContent = 'Copied';
+        setTimeout(function () { copyBtn.textContent = 'Copy'; }, 1600);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(email).then(done, function () { window.location.href = 'mailto:' + email; });
+      } else {
+        window.location.href = 'mailto:' + email;
+      }
+    });
+
+    /* ---------- Research tabs ---------- */
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+    function selectTab(tab, focus) {
+      tabs.forEach(function (t) {
+        var on = t === tab;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+      });
+      if (focus) tab.focus();
+    }
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener('click', function () { selectTab(tab, false); });
+      tab.addEventListener('keydown', function (e) {
+        var j = null;
+        if (e.key === 'ArrowRight') j = (i + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') j = (i - 1 + tabs.length) % tabs.length;
+        if (e.key === 'Home') j = 0;
+        if (e.key === 'End') j = tabs.length - 1;
+        if (j !== null) { e.preventDefault(); selectTab(tabs[j], true); }
+      });
+    });
+
+    /* ---------- Publications filter ---------- */
+    var pubs = Array.prototype.slice.call(document.querySelectorAll('.pub'));
+    var chips = Array.prototype.slice.call(document.querySelectorAll('#topic-chips .chip'));
+    var search = document.getElementById('pub-search');
+    var firstOnly = document.getElementById('first-only');
+    var countEl = document.getElementById('pub-count');
+    var emptyEl = document.getElementById('pub-empty');
+    var state = { topic: 'all', first: false, q: '' };
+
+    chips.forEach(function (c) {
+      var t = c.getAttribute('data-topic');
+      var n = t === 'all' ? pubs.length : pubs.filter(function (p) { return p.getAttribute('data-topic') === t; }).length;
+      var s = document.createElement('span');
+      s.className = 'count'; s.textContent = n;
+      c.appendChild(s);
+      c.addEventListener('click', function () {
+        state.topic = t;
+        chips.forEach(function (o) { o.setAttribute('aria-pressed', o === c ? 'true' : 'false'); });
+        applyFilters();
+      });
+    });
+    search.addEventListener('input', function () { state.q = search.value.trim().toLowerCase(); applyFilters(); });
+    firstOnly.addEventListener('change', function () { state.first = firstOnly.checked; applyFilters(); });
+    document.getElementById('pub-clear').addEventListener('click', function () {
+      state = { topic: 'all', first: false, q: '' };
+      search.value = ''; firstOnly.checked = false;
+      chips.forEach(function (o) { o.setAttribute('aria-pressed', o.getAttribute('data-topic') === 'all' ? 'true' : 'false'); });
+      applyFilters();
+    });
+
+    function applyFilters() {
+      var shown = 0, prevYear = null;
+      pubs.forEach(function (p) {
+        var ok = (state.topic === 'all' || p.getAttribute('data-topic') === state.topic) &&
+                 (!state.first || p.getAttribute('data-first') === 'true') &&
+                 (!state.q || p.textContent.toLowerCase().indexOf(state.q) !== -1);
+        p.hidden = !ok;
+        if (ok) {
+          shown++;
+          var y = p.getAttribute('data-year');
+          p.classList.toggle('same-year', y === prevYear);
+          prevYear = y;
+        }
+      });
+      countEl.textContent = shown === pubs.length ? pubs.length + ' entries' : shown + ' of ' + pubs.length + ' entries';
+      emptyEl.hidden = shown !== 0;
+    }
+    applyFilters();
+
+    /* ---------- News toggle ---------- */
+    var NEWS_VISIBLE = 6;
+    var newsItems = Array.prototype.slice.call(document.querySelectorAll('#news-list > li'));
+    var newsBtn = document.getElementById('news-more');
+    function setNews(expanded) {
+      newsItems.forEach(function (li, i) { li.hidden = !expanded && i >= NEWS_VISIBLE; });
+      newsBtn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      newsBtn.textContent = expanded ? 'Show fewer' : 'Show all ' + newsItems.length + ' updates';
+    }
+    if (newsItems.length > NEWS_VISIBLE) {
+      setNews(false);
+      newsBtn.addEventListener('click', function () { setNews(newsBtn.getAttribute('aria-expanded') !== 'true'); });
+    } else {
+      newsBtn.hidden = true;
+    }
+
+    /* ---------- Sliced optimal transport figure ---------- */
+    var canvas = document.getElementById('ot-canvas');
+    var ctx = canvas.getContext('2d');
+    var slider = document.getElementById('slice-angle');
+    var readout = document.getElementById('readout');
+    var bestBtn = document.getElementById('best-btn');
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Deterministic point clouds (seeded RNG) so the figure looks the same on every visit.
+    var seed = 20260515;
+    function rand() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    function gauss() { var u = 0; while (!u) u = rand(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rand()); }
+
+    var N = 90, src = [], tgt = [], i;
+    for (i = 0; i < N; i++) {           // source: a noisy ring
+      var a = rand() * Math.PI * 2, r = 1 + 0.08 * gauss();
+      src.push([Math.cos(a) * r, Math.sin(a) * r]);
+    }
+    for (i = 0; i < N; i++) {           // target: two clusters
+      var top = i < N * 0.55;
+      tgt.push(top
+        ? [-0.28 + 0.30 * gauss(), -0.48 + 0.24 * gauss()]
+        : [0.34 + 0.24 * gauss(), 0.56 + 0.20 * gauss()]);
+    }
+    function mean(P) { var m = [0, 0]; P.forEach(function (p) { m[0] += p[0]; m[1] += p[1]; }); return [m[0] / P.length, m[1] / P.length]; }
+    var ms = mean(src), mt = mean(tgt);
+
+    // Plan for a direction: sort projections and match in order. Translation does not change the order,
+    // so the plan is computed in each cloud's local frame.
+    var idxS = [], idxT = [];
+    for (i = 0; i < N; i++) { idxS.push(i); idxT.push(i); }
+    function planFor(theta) {
+      var ux = Math.cos(theta), uy = Math.sin(theta);
+      var ps = src.map(function (p) { return p[0] * ux + p[1] * uy; });
+      var pt = tgt.map(function (p) { return p[0] * ux + p[1] * uy; });
+      var s = idxS.slice().sort(function (x, y) { return ps[x] - ps[y]; });
+      var t = idxT.slice().sort(function (x, y) { return pt[x] - pt[y]; });
+      return [s, t];
+    }
+    // Shape cost of the plan: mean squared distance between matched points after centering each cloud.
+    function costFor(plan) {
+      var c = 0;
+      for (var k = 0; k < N; k++) {
+        var p = src[plan[0][k]], q = tgt[plan[1][k]];
+        var dx = (p[0] - ms[0]) - (q[0] - mt[0]), dy = (p[1] - ms[1]) - (q[1] - mt[1]);
+        c += dx * dx + dy * dy;
+      }
+      return c / N;
+    }
+    var bestDeg = 0, bestCost = Infinity;
+    for (var d = 0; d < 180; d += 0.5) {
+      var c = costFor(planFor(d * Math.PI / 180));
+      if (c < bestCost) { bestCost = c; bestDeg = d; }
+    }
+
+    var W = 0, H = 0, dpr = 1, colors = {};
+    function readColors() {
+      var cs = getComputedStyle(root);
+      colors.wine = cs.getPropertyValue('--wine').trim();
+      colors.steel = cs.getPropertyValue('--steel').trim();
+      colors.ink = cs.getPropertyValue('--ink').trim();
+      colors.rule = cs.getPropertyValue('--rule').trim();
+      colors.muted = cs.getPropertyValue('--muted').trim();
+    }
+    function resize() {
+      var rect = canvas.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = rect.width; H = rect.height;
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      requestDraw();
+    }
+
+    var theta = 30 * Math.PI / 180, targetTheta = null;
+    var lastInteraction = -Infinity, visible = true, running = false, startTime = performance.now();
+
+    function layout() {
+      var R = Math.min(W * 0.15, H * 0.33);
+      var gap = Math.min(W * 0.25, R * 3.6);
+      return { R: R, cs: [W / 2 - gap, H / 2 + 6], ct: [W / 2 + gap, H / 2 + 6] };
+    }
+
+    function draw(now) {
+      if (!W) return;
+      var L = layout(), R = L.R;
+      var plan = planFor(theta);
+      var ux = Math.cos(theta), uy = Math.sin(theta);
+      ctx.clearRect(0, 0, W, H);
+
+      // Slice direction through each cloud
+      ctx.save();
+      ctx.setLineDash([4, 5]);
+      ctx.strokeStyle = colors.muted; ctx.globalAlpha = 0.45; ctx.lineWidth = 1;
+      [L.cs, L.ct].forEach(function (c) {
+        ctx.beginPath();
+        ctx.moveTo(c[0] - ux * R * 1.55, c[1] - uy * R * 1.55);
+        ctx.lineTo(c[0] + ux * R * 1.55, c[1] + uy * R * 1.55);
+        ctx.stroke();
+      });
+      ctx.restore();
+
+      function S(k) { var p = src[plan[0][k]]; return [L.cs[0] + p[0] * R, L.cs[1] + p[1] * R]; }
+      function T(k) { var p = tgt[plan[1][k]]; return [L.ct[0] + p[0] * R, L.ct[1] + p[1] * R]; }
+
+      // Transport lines
+      ctx.save();
+      ctx.strokeStyle = colors.ink; ctx.globalAlpha = 0.13; ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (var k = 0; k < N; k++) { var a = S(k), b = T(k); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); }
+      ctx.stroke();
+      ctx.restore();
+
+      // Points
+      function dots(fn, color, rad) {
+        ctx.fillStyle = color; ctx.beginPath();
+        for (var k = 0; k < N; k++) { var p = fn(k); ctx.moveTo(p[0] + rad, p[1]); ctx.arc(p[0], p[1], rad, 0, Math.PI * 2); }
+        ctx.fill();
+      }
+      dots(S, colors.wine, 2.6);
+      dots(T, colors.steel, 2.6);
+
+      // Mass moving along the plan
+      if (!reduceMotion) {
+        var ph = ((now - startTime) / 3200) % 1;
+        var e = ph < 0.5 ? 2 * ph * ph : 1 - Math.pow(-2 * ph + 2, 2) / 2;
+        ctx.save(); ctx.globalAlpha = 0.85; ctx.fillStyle = colors.ink; ctx.beginPath();
+        for (var m = 0; m < N; m += 2) {
+          var s0 = S(m), t0 = T(m);
+          var x = s0[0] + (t0[0] - s0[0]) * e, y = s0[1] + (t0[1] - s0[1]) * e;
+          ctx.moveTo(x + 1.6, y); ctx.arc(x, y, 1.6, 0, Math.PI * 2);
+        }
+        ctx.fill(); ctx.restore();
+      }
+
+      var deg = Math.round(((theta * 180 / Math.PI) % 180 + 180) % 180);
+      if (+slider.value !== deg && targetTheta === null && document.activeElement !== slider) slider.value = deg;
+      readout.textContent = deg + '°, cost ' + costFor(plan).toFixed(2) + ' (best ' + bestCost.toFixed(2) + ')';
+    }
+
+    function frame(now) {
+      if (!visible) { running = false; return; }
+      if (targetTheta !== null) {
+        var diff = targetTheta - theta;
+        theta += diff * 0.12;
+        if (Math.abs(diff) < 0.002) { theta = targetTheta; targetTheta = null; lastInteraction = now; }
+      } else if (!reduceMotion && now - lastInteraction > 3500) {
+        theta += 0.0035;
+      }
+      draw(now);
+      if (reduceMotion && targetTheta === null) { running = false; return; }
+      requestAnimationFrame(frame);
+    }
+    function requestDraw() {
+      if (!running && visible) { running = true; requestAnimationFrame(frame); }
+    }
+
+    function setFromPointer(e) {
+      var rect = canvas.getBoundingClientRect();
+      var f = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+      theta = f * Math.PI; targetTheta = null;
+      lastInteraction = performance.now();
+      slider.value = Math.round(f * 179);
+      requestDraw();
+    }
+    canvas.addEventListener('pointermove', function (e) {
+      if (e.pointerType === 'mouse' || e.buttons) setFromPointer(e);
+    });
+    canvas.addEventListener('pointerdown', setFromPointer);
+    slider.addEventListener('input', function () {
+      theta = +slider.value * Math.PI / 180; targetTheta = null;
+      lastInteraction = performance.now() + 4000;
+      requestDraw();
+    });
+    bestBtn.addEventListener('click', function () {
+      var cur = ((theta % Math.PI) + Math.PI) % Math.PI;
+      theta = cur;
+      var tgtRad = bestDeg * Math.PI / 180;
+      // Directions repeat every 180°, so take the short way round.
+      if (tgtRad - cur > Math.PI / 2) tgtRad -= Math.PI;
+      if (cur - tgtRad > Math.PI / 2) tgtRad += Math.PI;
+      targetTheta = tgtRad;
+      lastInteraction = performance.now() + 6000;
+      requestDraw();
+    });
+
+    readColors();
+    document.addEventListener('themechange', function () { readColors(); requestDraw(); });
+    if ('ResizeObserver' in window) new ResizeObserver(resize).observe(canvas); else window.addEventListener('resize', resize);
+    new IntersectionObserver(function (en) { visible = en[0].isIntersecting; if (visible) requestDraw(); }).observe(canvas);
+    resize();
+  })();
+  </script>
+
+  <script>
+    // Preview fallback: if ashkan.jpg is not next to this file, use an embedded copy.
+    // Safe to delete this whole <script> once ashkan.jpg is uploaded with the page.
+    (function () {
+      var img = document.getElementById('portrait');
+      var DATA = 'data:image/jpeg;base64,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';
+      function useFallback() { img.onerror = null; img.src = DATA; }
+      if (window.__portraitFailed || (img.complete && img.naturalWidth === 0)) useFallback();
+      else img.addEventListener('error', useFallback, { once: true });
+    })();
+  </script>
 </body>
 </html>
