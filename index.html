@@ -378,6 +378,7 @@
       <nav class="nav" aria-label="Sections">
         <a href="#about">About</a>
         <a href="#research">Research</a>
+        <a href="#software">Software</a>
         <a href="#publications">Publications</a>
         <a href="#experience">Experience</a>
         <a href="#news">News</a>
@@ -529,6 +530,45 @@
               <li><span class="num">Tissue</span><span class="what">Neural Augmented Kelvinlet models multi-grasper soft-tissue deformation in real time (AAAI 2026)</span></li>
               <li><span class="num">Organ</span><span class="what">SurgFormer scales to whole organs, including topological changes from resection, at real-time inference</span></li>
               <li><span class="num">Patent</span><span class="what">application filed for hybrid AI-driven, physics-informed soft-tissue simulation</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Software ================= -->
+    <section class="block" id="software">
+      <div class="wrap">
+        <div class="block-head">
+          <h2>Software</h2>
+          <p class="block-note">Research code written to be read, not just run.</p>
+        </div>
+
+        <div class="tabpanels" style="border-radius:8px">
+          <div class="panel">
+            <div>
+          <h3>attnbank &mdash; a bank of efficient attention mechanisms</h3>
+          <p>Every efficient attention method changes one object in the same formula,
+             <em>y</em>(<em>q</em>) = &int; <em>v</em> d&pi;<sub><em>q</em></sub>. attnbank implements
+             thirty-two of them side by side, organised by <em>which</em> object they change &mdash;
+             the interaction, the support, the stored context, the factorisation, or the operator
+             itself &mdash; so that the cost of each choice can be measured rather than argued about.
+             It is the companion library to my monograph on efficient attention.</p>
+          <p>Every method is held to one invariant: the conditional measure and value field it
+             reports must reproduce its own output. Without that the error decomposition cannot be
+             measured at all. Each is additionally anchored to a configuration in which it provably
+             reduces to dense softmax, so correctness is tested rather than inspected.</p>
+          <p class="papers">
+            <a href="/attnbank/">Documentation</a> &middot;
+            <a href="/attnbank/methods/">Browse the bank</a> &middot;
+            <a href="https://github.com/Ashkan13776/attnbank">GitHub</a> &middot;
+            Apache-2.0
+          </p>
+            </div>
+            <ul class="results">
+          <li><span class="num">32</span><span class="what">methods across seven categories, each declaring which object of the attention operator it modifies and whether it accelerates, approximates, or replaces it</span></li>
+          <li><span class="num">1,254</span><span class="what">tests, including a conformance suite every registered method must pass and a cross-backend equivalence check against the reference implementation</span></li>
+          <li><span class="num">9</span><span class="what">studies, each pre-registering the result that would contradict the claim it tests</span></li>
             </ul>
           </div>
         </div>
