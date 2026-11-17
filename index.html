@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Ashkan Shahbazi</title>
-  <meta name="description" content="Ashkan Shahbazi, PhD candidate in Computer Science at Vanderbilt University. Research on efficient LLM inference: efficient attention, KV cache retrieval for long-context decoding, and adaptive model cascades, grounded in optimal transport and geometric deep learning." />
+  <meta name="description" content="Ashkan Shahbazi, PhD candidate in Computer Science at Vanderbilt University. Research on efficient LLM inference: efficient attention, KV cache compression for long-context decoding, and adaptive model cascades, grounded in optimal transport and geometric deep learning." />
   <meta property="og:title" content="Ashkan Shahbazi" />
   <meta property="og:description" content="PhD candidate at Vanderbilt working on efficient LLM inference, grounded in geometry." />
   <meta property="og:type" content="website" />
@@ -436,7 +436,7 @@
         <div class="about-grid">
           <div class="bio">
             <p>I'm a PhD candidate in Computer Science at Vanderbilt University, where I work in the Machine Intelligence and Neural Technologies (MINT) Lab with Prof. Soheil Kolouri. My research targets the compute and memory cost of LLM inference: attention that scales, KV caches that hold up over long contexts, and model cascades that send each query to the cheapest model that can handle it.</p>
-            <p>Much of that work starts from geometry. Optimal transport offers a principled answer to which tokens should attend to which, and it led to ESPFormer (ICML 2025), which computes doubly stochastic attention in a single pass without Sinkhorn iterations, and LOTFormer, which brings it to linear time. My latest project, OVAL, rethinks how KV cache pages are summarized for retrieval during long-context decoding, weighting directions by their effect on the attention output rather than on the keys alone.</p>
+            <p>Much of that work starts from geometry. Optimal transport offers a principled answer to which tokens should attend to which, and it led to ESPFormer (ICML 2025), which computes doubly stochastic attention in a single pass without Sinkhorn iterations, and LOTFormer, which brings it to linear time. My latest project, OVAL, lets page retrieval shrink the KV cache instead of growing it: each page is stored only as output-aware low-rank bases that serve as both the retrieval index and the storage.</p>
             <p>I care about these ideas holding up outside the lab. At Instacart, I deployed a multi-LLM cascade for catalog attribute extraction that matches the F1 of running o3 on every product at 75–80% lower cost. With clinical and engineering collaborators, I also build real-time neural simulators of soft-tissue deformation and cutting for surgical simulation (AAAI 2026, U.S. patent application). Before Vanderbilt, I studied Biomedical Engineering at Amirkabir University of Technology in Tehran.</p>
           </div>
           <aside class="facts" aria-label="Quick facts">
@@ -475,7 +475,7 @@
         </div>
 
         <div class="tabs" role="tablist" aria-label="Research threads">
-          <button class="tab" role="tab" id="tab-kv" aria-controls="panel-kv" aria-selected="true">KV cache retrieval</button>
+          <button class="tab" role="tab" id="tab-kv" aria-controls="panel-kv" aria-selected="true">KV cache compression</button>
           <button class="tab" role="tab" id="tab-attn" aria-controls="panel-attn" aria-selected="false" tabindex="-1">Efficient attention</button>
           <button class="tab" role="tab" id="tab-cascade" aria-controls="panel-cascade" aria-selected="false" tabindex="-1">LLM cascades</button>
           <button class="tab" role="tab" id="tab-surg" aria-controls="panel-surg" aria-selected="false" tabindex="-1">Surgical simulation</button>
@@ -483,14 +483,14 @@
         <div class="tabpanels">
           <div class="panel" role="tabpanel" id="panel-kv" aria-labelledby="tab-kv">
             <div>
-              <h3>Retrieving the right KV pages for long-context decoding</h3>
-              <p>Long reasoning traces and 100K-token contexts make the KV cache the bottleneck. OVAL is a training-free page summary that weights key directions by how much they change the attention output, so retrieval picks the pages that actually matter. It keeps the same format and scoring cost as key-only spectral summaries at equal rank and page size.</p>
-              <p class="papers">Paper: OVAL (first author, arXiv 2026)</p>
+              <h3>A KV page index that is also the storage</h3>
+              <p>Long reasoning traces, long documents and long videos make the KV cache the bottleneck. Page-retrieval methods read only the top-scoring pages each step, but still store every page exactly. OVAL stores each page only as low-rank bases: an output-aware key basis that scores the page and rebuilds its keys, and a PCA basis for its values. The exact pages are dropped, and a closed-form rule sets the output-awareness of each head.</p>
+              <p class="papers">Paper: OVAL (first author, arXiv 2026) &middot; <a href="/oval-kv/">Project page</a> &middot; <a href="https://github.com/Ashkan13776/oval-kv" target="_blank" rel="noopener noreferrer">Code</a></p>
             </div>
             <ul class="results">
-              <li><span class="num">9 / 9</span><span class="what">settings where OVAL is best (one tie) among 8 compressed methods, at a 2,048-token KV budget on DeepSeek-R1-Distill 7B to 14B</span></li>
-              <li><span class="num">+7.1</span><span class="what">percentage points over the strongest baseline on AIME24; +3.7 to +3.9 on average across MATH500, AIME24 and GPQA</span></li>
-              <li><span class="num">87.2%</span><span class="what">of full-cache accuracy at 100K+ tokens on InfiniteBench with Llama-3.1-8B, versus 83.9% for FreeKV</span></li>
+              <li><span class="num">8 / 9</span><span class="what">long-reasoning settings where OVAL is best or tied-best in avg@8 at the same attended budget, on DeepSeek-R1-Distill 7B to 14B</span></li>
+              <li><span class="num">56%</span><span class="what">of full-cache memory on AIME24 (Qwen-14B), 1.25 points above the best baseline; matches FullKV on MATH500 at 66%</span></li>
+              <li><span class="num">53%</span><span class="what">of the full cache stored on Video-MME and LVBench, within 0.32 points of exact-page retrieval that stores 103%</span></li>
             </ul>
           </div>
 
@@ -603,11 +603,12 @@
           <li class="pub" data-topic="attention" data-first="true" data-year="2026">
             <div class="pub-year">2026</div>
             <div>
-              <h3 class="pub-title">OVAL: Output-Aware Local Page Bases for KV Cache Retrieval</h3>
+              <h3 class="pub-title"><a href="/oval-kv/">OVAL: Output-Aware Local Page Bases for KV Cache Compression</a></h3>
               <p class="pub-authors"><strong>A. Shahbazi</strong>, C. Thrash, S. Kolouri</p>
               <div class="meta-line">
                 <span class="venue">arXiv 2026</span>
-                <details><summary>Summary</summary><p>A training-free KV page summary that weights key directions by their effect on the attention output. At a 2,048-token budget it is the best of 8 compressed methods in all 9 long-reasoning settings (one tie), up to +7.1 points on AIME24, and keeps 87.2% of full-cache accuracy at 100K+ tokens.</p></details>
+                <a href="https://github.com/Ashkan13776/oval-kv" target="_blank" rel="noopener noreferrer">Code</a>
+                <details><summary>Summary</summary><p>Page retrieval whose index is also the storage: each KV page is kept only as an output-aware low-rank key basis and a PCA value basis. At the same attended budget it is best or tied-best in 8 of 9 long-reasoning settings, matches FullKV on MATH500 with 66% of its memory, is on par with FullKV on LongBench v2, and stores 53% of the full cache on video, within 0.32 points of exact-page retrieval.</p></details>
               </div>
             </div>
           </li>
@@ -778,7 +779,7 @@
               <h3>Graduate Research Assistant</h3>
               <p class="t-where">MINT Lab, Department of Computer Science, Vanderbilt University</p>
               <ul>
-                <li>Efficient LLM inference: KV cache retrieval for long-context decoding (OVAL) and transport-based attention (ESPFormer, LOTFormer, LUNA).</li>
+                <li>Efficient LLM inference: KV cache compression for long-context decoding (OVAL) and transport-based attention (ESPFormer, LOTFormer, LUNA).</li>
                 <li>Geometric machine learning and real-time surgical simulation with collaborators in engineering and medicine.</li>
               </ul>
             </div>
@@ -817,7 +818,7 @@
       <div class="wrap">
         <div class="block-head"><h2>News</h2></div>
         <ul class="news" id="news-list">
-          <li><span class="yr">2026</span><span>Posted <strong>OVAL</strong>, output-aware page summaries for KV cache retrieval in long-context decoding.</span></li>
+          <li><span class="yr">2026</span><span>Posted <strong><a href="/oval-kv/">OVAL</a></strong>: output-aware low-rank page bases that act as both the KV retrieval index and the storage, with new video and robot-episode results.</span></li>
           <li><span class="yr">2026</span><span>"A Case for Vanilla SWD" accepted to <strong>TMLR</strong>.</span></li>
           <li><span class="yr">2026</span><span>Admitted with a program grant to the Machine Learning Summer School (MLSS) NYC at Columbia University.</span></li>
           <li><span class="yr">2026</span><span>"One Category One Prompt" accepted to the SynData4CV workshop at <strong>CVPR 2026</strong>.</span></li>
