@@ -485,7 +485,7 @@
             <div>
               <h3>A KV page index that is also the storage</h3>
               <p>Long reasoning traces, long documents and long videos make the KV cache the bottleneck. Page-retrieval methods read only the top-scoring pages each step, but still store every page exactly. OVAL stores each page only as low-rank bases: an output-aware key basis that scores the page and rebuilds its keys, and a PCA basis for its values. The exact pages are dropped, and a closed-form rule sets the output-awareness of each head.</p>
-              <p class="papers">Paper: OVAL (first author, arXiv 2026) &middot; <a href="/oval-kv/">Project page</a> &middot; <a href="https://github.com/Ashkan13776/oval-kv" target="_blank" rel="noopener noreferrer">Code</a></p>
+              <p class="papers">Paper: <a href="https://arxiv.org/abs/2610.06686" target="_blank" rel="noopener noreferrer">OVAL</a> (first author, arXiv 2026) &middot; <a href="/oval-kv/">Project page</a> &middot; <a href="https://github.com/Ashkan13776/oval-kv" target="_blank" rel="noopener noreferrer">Code</a></p>
             </div>
             <ul class="results">
               <li><span class="num">8 / 9</span><span class="what">long-reasoning settings where OVAL is best or tied-best in avg@8 at the same attended budget, on DeepSeek-R1-Distill 7B to 14B</span></li>
@@ -607,6 +607,8 @@
               <p class="pub-authors"><strong>A. Shahbazi</strong>, C. Thrash, S. Kolouri</p>
               <div class="meta-line">
                 <span class="venue">arXiv 2026</span>
+                <a href="https://arxiv.org/abs/2610.06686" target="_blank" rel="noopener noreferrer">arXiv</a>
+                <a href="/oval-kv/">Project page</a>
                 <a href="https://github.com/Ashkan13776/oval-kv" target="_blank" rel="noopener noreferrer">Code</a>
                 <details><summary>Summary</summary><p>Page retrieval whose index is also the storage: each KV page is kept only as an output-aware low-rank key basis and a PCA value basis. At the same attended budget it is best or tied-best in 8 of 9 long-reasoning settings, matches FullKV on MATH500 with 66% of its memory, is on par with FullKV on LongBench v2, and stores 53% of the full cache on video, within 0.32 points of exact-page retrieval.</p></details>
               </div>
